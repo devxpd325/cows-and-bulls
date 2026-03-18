@@ -6,118 +6,114 @@
   <title>Cows &amp; Bulls</title>
   <style>
     /* ═══════════════════════════════════════════════════
-       DESIGN TOKENS — LIGHT MODE
+       DESIGN TOKENS — PLAYFUL FARM (light default)
     ═══════════════════════════════════════════════════ */
     :root {
       --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
       --s5: 24px; --s6: 32px; --s7: 48px;
 
-      --radius-sm: 6px;  --radius-md: 8px;  --radius-lg: 16px;
-
-      /*
-       * Input height: 52px desktop → 48px mobile (still above 44px tap target).
-       * Set here; overridden in media query below.
-       */
+      --radius-sm: 6px; --radius-md: 10px; --radius-lg: 20px;
       --input-h: 52px;
-
       --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
 
-      /* primary */
-      --primary:       #4f46e5;
-      --primary-dark:  #4338ca;
-      --primary-ring:  rgba(79,70,229,.18);
-      --primary-faint: #eef2ff;
-      --primary-text:  #3730a3;
+      /* farm primary — deep meadow green */
+      --primary:       #2d6a4f;
+      --primary-dark:  #1b4332;
+      --primary-ring:  rgba(45,106,79,.22);
+      --primary-faint: #d8f3dc;
+      --primary-text:  #1b4332;
 
-      /* bull — amber */
+      /* bull — golden amber (unchanged) */
       --bull-faint:  #fffbeb;
       --bull-text:   #92400e;
       --bull-border: #fde68a;
+      --bull-solid:  #f59e0b;
 
-      /* cow — teal */
-      --cow-faint:  #f0fdfa;
-      --cow-text:   #134e4a;
-      --cow-border: #99f6e4;
+      /* cow — soft teal green */
+      --cow-faint:  #ecfdf5;
+      --cow-text:   #065f46;
+      --cow-border: #6ee7b7;
+      --cow-solid:  #10b981;
 
-      /* neutrals */
-      --bg:               #f3f4f6;
-      --surface:          #ffffff;
-      --border:           #e5e7eb;
-      --border-mid:       #d1d5db;
-      --text-strong:      #111827;
-      --text-base:        #374151;
-      --text-muted:       #6b7280;
-      --text-faint:       #9ca3af;
-      --text-placeholder: #d1d5db;
+      /* miss tile */
+      --miss-solid: #9ca3af;
+
+      /* warm neutrals */
+      --bg:               #fef9f0;
+      --surface:          #fffef9;
+      --border:           #e8ddd0;
+      --border-mid:       #d4c5b2;
+      --text-strong:      #1c1208;
+      --text-base:        #3d2c1e;
+      --text-muted:       #7a6355;
+      --text-faint:       #9c836e;
+      --text-placeholder: #c4a882;
       --error:            #dc2626;
 
-      --body-bg:  #eef0ff;
-      --blob-1:   rgba(167,139,250,.28);
-      --blob-2:   rgba(94,234,212,.22);
-      --blob-3:   rgba(251,191,36,.12);
+      --body-bg:    #fdf6ec;
+      --dot-color:  rgba(164,120,82,.1);
+      --blob-1:     rgba(45,106,79,.12);
+      --blob-2:     rgba(245,158,11,.14);
+      --blob-3:     rgba(180,83,9,.07);
 
       --modal-overlay: rgba(0,0,0,.45);
-      --modal-bg:      #ffffff;
+      --modal-bg:      #fffef9;
     }
 
     /* ── Dark mode ── */
     [data-theme="dark"] {
-      --primary:       #818cf8;
-      --primary-dark:  #6366f1;
-      --primary-ring:  rgba(129,140,248,.25);
-      --primary-faint: rgba(79,70,229,.18);
-      --primary-text:  #c7d2fe;
+      --primary:       #52b788;
+      --primary-dark:  #40916c;
+      --primary-ring:  rgba(82,183,136,.25);
+      --primary-faint: rgba(45,106,79,.2);
+      --primary-text:  #b7e4c7;
 
       --bull-faint:  rgba(245,158,11,.12);
       --bull-text:   #fcd34d;
       --bull-border: rgba(245,158,11,.35);
+      --bull-solid:  #f59e0b;
 
-      --cow-faint:  rgba(13,148,136,.12);
-      --cow-text:   #5eead4;
-      --cow-border: rgba(13,148,136,.35);
+      --cow-faint:  rgba(16,185,129,.12);
+      --cow-text:   #6ee7b7;
+      --cow-border: rgba(16,185,129,.35);
+      --cow-solid:  #10b981;
 
-      --bg:               #1a1b2e;
-      --surface:          #252640;
-      --border:           #363756;
-      --border-mid:       #4a4b6a;
-      --text-strong:      #f1f1ff;
-      --text-base:        #c4c5e0;
-      --text-muted:       #8b8ca8;
-      --text-faint:       #6b6c88;
-      --text-placeholder: #4a4b6a;
+      --miss-solid: #6b7280;
+
+      --bg:               #1a1d16;
+      --surface:          #242b1e;
+      --border:           #374130;
+      --border-mid:       #4a5740;
+      --text-strong:      #f0f4ec;
+      --text-base:        #c8d4be;
+      --text-muted:       #8a9e7a;
+      --text-faint:       #6b7a5e;
+      --text-placeholder: #4a5740;
       --error:            #f87171;
 
-      --body-bg:  #0f0f1a;
-      --blob-1:   rgba(129,140,248,.15);
-      --blob-2:   rgba(45,212,191,.10);
-      --blob-3:   rgba(251,191,36,.06);
+      --body-bg:   #111508;
+      --dot-color: rgba(82,183,136,.07);
+      --blob-1:    rgba(82,183,136,.12);
+      --blob-2:    rgba(245,158,11,.08);
+      --blob-3:    rgba(180,83,9,.05);
 
       --modal-overlay: rgba(0,0,0,.7);
-      --modal-bg:      #252640;
+      --modal-bg:      #242b1e;
     }
 
     /* ═══════════════════════════════════════════════════
        RESET & BASE
     ═══════════════════════════════════════════════════ */
     *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      /* kill blue flash on tap (mobile) */
+      box-sizing: border-box; margin: 0; padding: 0;
       -webkit-tap-highlight-color: transparent;
     }
 
-    html {
-      /* smooth theme colour transition */
-      transition: background-color 0.3s;
-    }
-
-    /* prevent layout shift when modal opens */
+    html { transition: background-color 0.3s; }
     body.modal-open { overflow: hidden; }
 
     body {
       min-height: 100vh;
-      /* flex-start: content anchors top when history grows tall on phones */
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -128,29 +124,49 @@
       color: var(--text-base);
       line-height: 1.5;
       background-color: var(--body-bg);
+      /* warm dot grid + blobs */
       background-image:
-        radial-gradient(ellipse at 15% 20%, var(--blob-1) 0%, transparent 55%),
-        radial-gradient(ellipse at 85% 75%, var(--blob-2) 0%, transparent 55%),
-        radial-gradient(ellipse at 50% 50%, var(--blob-3) 0%, transparent 70%);
-      /* background doesn't re-transition on every render */
+        radial-gradient(ellipse at 10% 15%,  var(--blob-1) 0%, transparent 52%),
+        radial-gradient(ellipse at 90% 80%,  var(--blob-2) 0%, transparent 52%),
+        radial-gradient(ellipse at 55% 45%,  var(--blob-3) 0%, transparent 60%),
+        radial-gradient(circle, var(--dot-color) 1px, transparent 1px);
+      background-size: 100% 100%, 100% 100%, 100% 100%, 22px 22px;
       transition: background-color 0.3s, color 0.3s;
     }
 
-    /* ── Keyboard focus rings (accessibility) ── */
-    :focus-visible {
-      outline: 2px solid var(--primary);
-      outline-offset: 2px;
-    }
+    :focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 
     /* ═══════════════════════════════════════════════════
        HEADER
     ═══════════════════════════════════════════════════ */
+    header {
+      width: 100%;
+      max-width: 800px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      margin-bottom: var(--s5);
+    }
+
+    .header-title {
+      grid-column: 1;
+      text-align: center;
+    }
+
+    /* mascot + logo row */
+    .logo-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--s3);
+    }
+
     .logo {
       font-size: clamp(1.5rem, 5vw, 2rem);
       font-weight: 900;
       letter-spacing: -0.03em;
       line-height: 1;
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 40%, #0d9488 100%);
+      background: linear-gradient(135deg, #2d6a4f 0%, #52b788 45%, #b45309 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -163,17 +179,11 @@
       letter-spacing: 0.03em;
     }
 
-    /* ── Header grid — logo centred, controls stacked on right ── */
-    header {
-      width: 100%;
-      max-width: 800px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: start;
-      margin-bottom: var(--s5);
-    }
+    /* SVG mascots */
+    .mascot { flex-shrink: 0; transition: transform 0.3s ease; }
+    .mascot:hover { transform: scale(1.1) rotate(-5deg); }
 
-    /* control buttons stack vertically on the right */
+    /* controls */
     .header-controls {
       grid-column: 2;
       display: flex;
@@ -182,13 +192,7 @@
       align-items: flex-end;
     }
 
-    .header-title {
-      grid-column: 1;
-      text-align: center;
-    }
-
-    /* ── Theme toggle ── */
-    .theme-toggle {
+    .theme-toggle, .mute-toggle {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 99px;
@@ -209,37 +213,16 @@
       box-shadow: 0 1px 4px rgba(0,0,0,.08);
     }
 
-    .theme-toggle:hover { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
+    .theme-toggle:hover, .mute-toggle:hover {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-ring);
+    }
 
+    .mute-toggle.muted { color: var(--text-placeholder); }
     .toggle-icon { font-size: 1rem; line-height: 1; }
 
-    /* ── Mute toggle — same pill style as theme toggle ── */
-    .mute-toggle {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 99px;
-      padding: var(--s1) var(--s3);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
-      color: var(--text-muted);
-      font-family: var(--font);
-      font-size: 0.75rem;
-      font-weight: 500;
-      min-height: 44px;
-      min-width: 44px;
-      justify-content: center;
-      white-space: nowrap;
-      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
-      box-shadow: 0 1px 4px rgba(0,0,0,.08);
-    }
-
-    .mute-toggle:hover { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
-    .mute-toggle.muted { color: var(--text-placeholder); }
-
     /* ═══════════════════════════════════════════════════
-       TWO-COLUMN LAYOUT
+       LAYOUT
     ═══════════════════════════════════════════════════ */
     .layout {
       display: flex;
@@ -258,39 +241,34 @@
       border-radius: var(--radius-lg);
       border: 1px solid var(--border);
       box-shadow:
-        0 1px 2px rgba(0,0,0,.04),
-        0 6px 24px rgba(79,70,229,.08),
-        0 16px 48px rgba(0,0,0,.06);
+        0 2px 4px rgba(0,0,0,.04),
+        0 8px 28px rgba(45,106,79,.10),
+        0 20px 56px rgba(0,0,0,.07);
       overflow: hidden;
       transition: background 0.3s, border-color 0.3s;
     }
 
-    .card {
-      flex: 1 1 0;
-      min-width: 0;
-    }
+    .card { flex: 1 1 0; min-width: 0; }
 
+    /* Farm-themed gradient stripe */
     .card::before {
       content: '';
       display: block;
-      height: 4px;
-      background: linear-gradient(90deg, #4f46e5, #7c3aed, #0d9488, #f59e0b);
+      height: 5px;
+      background: linear-gradient(90deg, #2d6a4f, #52b788, #f59e0b, #b45309, #ef4444);
     }
 
-    .lb-card {
-      flex: 0 0 260px;
-      width: 260px;
-    }
+    .lb-card { flex: 0 0 260px; width: 260px; }
 
     .lb-card::before {
       content: '';
       display: block;
-      height: 4px;
-      background: linear-gradient(90deg, #7c3aed, #4f46e5);
+      height: 5px;
+      background: linear-gradient(90deg, #b45309, #f59e0b, #2d6a4f);
     }
 
     /* ═══════════════════════════════════════════════════
-       LEADERBOARD INTERNALS
+       LEADERBOARD
     ═══════════════════════════════════════════════════ */
     .lb-header {
       display: flex;
@@ -300,40 +278,22 @@
     }
 
     .lb-title {
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: var(--text-strong);
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
+      font-size: 0.875rem; font-weight: 700; color: var(--text-strong);
+      display: flex; align-items: center; gap: var(--s2);
     }
 
     .lb-clear-btn {
-      font-family: var(--font);
-      font-size: 0.6875rem;
-      font-weight: 500;
-      color: var(--text-faint);
-      background: none;
-      border: none;
-      cursor: pointer;
-      padding: var(--s1) var(--s2);
-      /* 44px touch target via min-height */
-      min-height: 44px;
-      min-width: 44px;
-      border-radius: var(--radius-sm);
-      transition: color 0.15s, background 0.15s;
+      font-family: var(--font); font-size: 0.6875rem; font-weight: 500;
+      color: var(--text-faint); background: none; border: none; cursor: pointer;
+      padding: var(--s1) var(--s2); min-height: 44px; min-width: 44px;
+      border-radius: var(--radius-sm); transition: color 0.15s, background 0.15s;
     }
 
     .lb-clear-btn:hover { color: var(--error); background: rgba(220,38,38,.08); }
 
     .lb-divider { border: none; border-top: 1px solid var(--border); margin: var(--s3) var(--s4) 0; }
 
-    .lb-list {
-      padding: var(--s3) var(--s4) var(--s4);
-      display: flex;
-      flex-direction: column;
-      gap: var(--s2);
-    }
+    .lb-list { padding: var(--s3) var(--s4) var(--s4); display: flex; flex-direction: column; gap: var(--s2); }
 
     .lb-row {
       display: grid;
@@ -360,11 +320,8 @@
     .lb-stat { display: flex; flex-direction: column; }
 
     .lb-stat-label {
-      font-size: 0.5625rem;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-faint);
+      font-size: 0.5625rem; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.06em; color: var(--text-faint);
     }
 
     .lb-stat-val { font-size: 0.8125rem; font-weight: 700; color: var(--text-strong); }
@@ -374,12 +331,8 @@
     .lb-score-val { font-size: 0.9375rem; font-weight: 800; color: var(--primary); line-height: 1; }
 
     .lb-score-label {
-      font-size: 0.5625rem;
-      font-weight: 600;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-top: 2px;
+      font-size: 0.5625rem; font-weight: 600; color: var(--text-faint);
+      text-transform: uppercase; letter-spacing: 0.06em; margin-top: 2px;
     }
 
     .lb-empty { padding: var(--s6) var(--s4); text-align: center; }
@@ -392,50 +345,35 @@
     ═══════════════════════════════════════════════════ */
     .how-section {
       border-bottom: 1px solid var(--border);
-      background: linear-gradient(135deg, rgba(238,242,255,.6) 0%, rgba(240,253,250,.6) 100%);
+      background: linear-gradient(135deg, rgba(216,243,220,.5) 0%, rgba(254,251,235,.5) 100%);
       transition: background 0.3s;
     }
 
     [data-theme="dark"] .how-section {
-      background: linear-gradient(135deg, rgba(79,70,229,.08) 0%, rgba(13,148,136,.06) 100%);
+      background: linear-gradient(135deg, rgba(45,106,79,.08) 0%, rgba(245,158,11,.05) 100%);
     }
 
     .how-toggle {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      /* min 44px touch target */
-      min-height: 44px;
-      padding: var(--s3) var(--s5);
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-family: var(--font);
-      font-size: 0.8125rem;
-      font-weight: 600;
-      color: var(--text-muted);
-      transition: background 0.15s;
-      user-select: none;
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      min-height: 44px; padding: var(--s3) var(--s5);
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font); font-size: 0.8125rem; font-weight: 600;
+      color: var(--text-muted); transition: background 0.15s; user-select: none;
     }
 
     .how-toggle:hover { background: rgba(0,0,0,.03); }
     .how-toggle .toggle-label { display: flex; align-items: center; gap: var(--s2); }
 
     .how-arrow {
-      font-size: 0.6875rem;
-      color: var(--text-placeholder);
+      font-size: 0.6875rem; color: var(--text-placeholder);
       transition: transform 0.22s ease;
     }
 
     .how-toggle[aria-expanded="true"] .how-arrow { transform: rotate(180deg); }
 
     .how-body {
-      display: none;
-      padding: 0 var(--s5) var(--s5);
-      font-size: 0.8125rem;
-      line-height: 1.65;
-      color: var(--text-muted);
+      display: none; padding: 0 var(--s5) var(--s5);
+      font-size: 0.8125rem; line-height: 1.65; color: var(--text-muted);
     }
 
     .how-body.open { display: block; animation: fadeSlide 0.18s ease; }
@@ -443,25 +381,17 @@
     .how-body p:last-child { margin-bottom: 0; }
 
     .how-body .pill {
-      display: inline-block;
-      border-radius: var(--radius-sm);
-      padding: 1px var(--s2);
-      font-size: 0.75rem;
-      font-weight: 600;
-      margin-right: var(--s1);
+      display: inline-block; border-radius: var(--radius-sm);
+      padding: 1px var(--s2); font-size: 0.75rem; font-weight: 600; margin-right: var(--s1);
     }
 
     .pill-bull { background: var(--bull-faint); color: var(--bull-text); border: 1px solid var(--bull-border); }
     .pill-cow  { background: var(--cow-faint);  color: var(--cow-text);  border: 1px solid var(--cow-border); }
 
     .how-example {
-      margin-top: var(--s3);
-      padding: var(--s3) var(--s4);
-      background: var(--bg);
-      border-radius: var(--radius-md);
-      font-size: 0.75rem;
-      border-left: 3px solid var(--border-mid);
-      color: var(--text-base);
+      margin-top: var(--s3); padding: var(--s3) var(--s4);
+      background: var(--bg); border-radius: var(--radius-md);
+      font-size: 0.75rem; border-left: 3px solid var(--primary-faint); color: var(--text-base);
     }
 
     .how-example strong { color: var(--text-strong); }
@@ -473,84 +403,139 @@
 
     /* ── Meta row ── */
     .meta-row {
-      display: flex;
-      align-items: center;
+      display: flex; align-items: center;
       justify-content: space-between;
-      margin-bottom: var(--s4);
-      gap: var(--s2);
+      margin-bottom: var(--s4); gap: var(--s2);
     }
 
     .meta-badges { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; }
 
     .guess-badge {
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
-      font-size: 0.75rem;
-      font-weight: 600;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
+      display: flex; align-items: center; gap: var(--s2);
+      font-size: 0.75rem; font-weight: 600;
+      color: var(--text-faint); text-transform: uppercase; letter-spacing: 0.07em;
       white-space: nowrap;
     }
 
     .guess-badge .count {
-      background: var(--primary-faint);
-      color: var(--primary-text);
-      font-size: 0.875rem;
-      font-weight: 700;
-      padding: var(--s1) var(--s3);
-      border-radius: 99px;
-      border: 1px solid rgba(99,102,241,.25);
+      background: var(--primary-faint); color: var(--primary-text);
+      font-size: 0.875rem; font-weight: 700;
+      padding: var(--s1) var(--s3); border-radius: 99px;
+      border: 1px solid rgba(45,106,79,.2);
     }
 
-    /* ── Input row ── */
-    .input-row {
-      display: flex;
-      gap: var(--s2);
+    /* ═══════════════════════════════════════════════════
+       DIGIT TILES (replaces single input)
+    ═══════════════════════════════════════════════════ */
+    .tiles-container {
+      position: relative;
+      cursor: text;
+      user-select: none;
       margin-bottom: var(--s2);
     }
 
-    .input-row input { flex: 1; min-width: 0; }
-
-    .guess-input {
-      flex: 1;
-      height: var(--input-h);
-      background: var(--primary-faint);
-      border: 2px solid rgba(99,102,241,.3);
-      border-radius: var(--radius-md);
-      font-family: var(--font);
-      /*
-       * CRITICAL: font-size must be ≥ 16px on mobile inputs.
-       * Below 16px, iOS Safari auto-zooms the page on focus.
-       * We use 16px as the minimum; clamp scales up on larger screens.
-       */
-      font-size: clamp(1rem, 4vw, 1.5rem);
-      font-weight: 700;
-      letter-spacing: 0.3em;
-      text-align: center;
-      overflow: hidden;
-      padding-left: calc(var(--s3) + 0.3em);
-      padding-right: var(--s3);
-      color: var(--primary-text);
-      outline: none;
-      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
-      caret-color: var(--primary);
-      /* prevent iOS rounding input corners */
-      -webkit-appearance: none;
-      appearance: none;
-      border-radius: var(--radius-md);
+    .tiles-and-btn {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
     }
 
-    .guess-input::placeholder { color: var(--text-placeholder); letter-spacing: 0.3em; font-weight: 400; }
+    .tiles-row {
+      display: flex;
+      justify-content: center;
+      gap: var(--s3);
+      flex: 1;
+    }
 
-    .guess-input:focus {
+    /* Each tile is a 3D flip card */
+    .tile {
+      width: 60px;
+      height: 64px;
+      perspective: 400px;
+      flex-shrink: 0;
+    }
+
+    .tile-inner {
+      position: relative;
+      width: 100%; height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .tile.flipped .tile-inner { transform: rotateY(180deg); }
+
+    .tile-front, .tile-back {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: var(--radius-md);
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+    }
+
+    /* Front face — digit entry */
+    .tile-front {
+      background: var(--surface);
+      border: 2px solid var(--border);
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+      flex-direction: column;
+    }
+
+    /* Active tile — ring and tint are sufficient focus indicators */
+    .tile.active .tile-front {
       border-color: var(--primary);
       box-shadow: 0 0 0 3px var(--primary-ring);
-      background: var(--surface);
+      background: var(--primary-faint);
     }
 
-    .guess-input:disabled { opacity: 0.45; cursor: not-allowed; }
+    /* Filled tile */
+    .tile.filled .tile-front {
+      border-color: var(--border-mid);
+      background: var(--bg);
+    }
+
+    /* Back face — neutral reveal (no per-digit colour to avoid giving away info) */
+    .tile-back {
+      transform: rotateY(180deg);
+      font-size: 1.9rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      border: 2px solid var(--border-mid);
+      background: var(--bg);
+    }
+
+    .tile-back.revealed {
+      background: var(--primary-faint);
+      border-color: var(--primary);
+      color: var(--primary-text);
+    }
+
+    /* Scale bounce when tile flips */
+    @keyframes tileReveal {
+      0%   { transform: rotateY(180deg) scale(1); }
+      50%  { transform: rotateY(180deg) scale(1.1); }
+      100% { transform: rotateY(180deg) scale(1); }
+    }
+
+    .tile.flipped .tile-inner {
+      animation: tileReveal 0.22s cubic-bezier(0.4, 0, 0.2, 1) both;
+    }
+
+    /* Hidden real input — positioned over tiles area, zero-opacity */
+    .hidden-tile-input {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      opacity: 0;
+      z-index: 2;
+      font-size: 16px; /* prevent iOS zoom */
+      cursor: text;
+      caret-color: transparent;
+    }
+
+    .hidden-tile-input:disabled { cursor: not-allowed; pointer-events: none; }
 
     /* ── Buttons ── */
     .btn {
@@ -559,18 +544,17 @@
       align-items: center;
       justify-content: center;
       font-family: var(--font);
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.875rem;
-      letter-spacing: 0.01em;
+      letter-spacing: 0.02em;
       border: none;
       border-radius: var(--radius-md);
       cursor: pointer;
       padding: 0 var(--s5);
       white-space: nowrap;
-      /* ensure touch targets are at least 44px tall */
       min-height: 44px;
       transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
-      touch-action: manipulation;  /* remove 300ms delay on mobile */
+      touch-action: manipulation;
     }
 
     .btn:active { transform: scale(0.97); }
@@ -578,227 +562,134 @@
     .btn-primary {
       background: var(--primary);
       color: #fff;
-      box-shadow: 0 2px 8px rgba(79,70,229,.35);
+      box-shadow: 0 3px 10px rgba(45,106,79,.4);
     }
 
     .btn-primary:hover     { background: var(--primary-dark); }
     .btn-primary:disabled  { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
 
     .btn-secondary {
-      height: auto;
-      padding: var(--s2) var(--s4);
-      min-height: 44px; /* touch target */
-      background: var(--bg);
-      color: var(--text-muted);
-      border: 1px solid var(--border);
-      font-size: 0.8125rem;
+      height: auto; padding: var(--s2) var(--s4); min-height: 44px;
+      background: var(--bg); color: var(--text-muted);
+      border: 1px solid var(--border); font-size: 0.8125rem; font-weight: 600;
     }
 
     .btn-secondary:hover { background: var(--border); color: var(--text-base); }
 
     /* ── Error ── */
     .error-box {
-      min-height: 20px;
-      font-size: 0.75rem;
-      color: var(--error);
-      font-weight: 500;
-      margin-bottom: var(--s2);
-      padding: 0 var(--s1);
+      min-height: 20px; font-size: 0.75rem; color: var(--error);
+      font-weight: 500; margin-bottom: var(--s2); padding: 0 var(--s1);
     }
 
-    /* ── Win banner ── */
+    /* ═══════════════════════════════════════════════════
+       WIN BANNER
+    ═══════════════════════════════════════════════════ */
     .win-banner {
       display: none;
       text-align: center;
       padding: var(--s4) var(--s5);
       margin-bottom: var(--s4);
-      background: linear-gradient(135deg, #dcfce7, #d1fae5);
+      background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
       border-radius: var(--radius-md);
-      border: 1px solid #86efac;
+      border: 1px solid #74c69d;
     }
 
     [data-theme="dark"] .win-banner {
-      background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(16,185,129,.12));
-      border-color: rgba(134,239,172,.3);
+      background: linear-gradient(135deg, rgba(82,183,136,.18), rgba(45,106,79,.15));
+      border-color: rgba(82,183,136,.4);
     }
 
-    .win-banner.visible { display: block; animation: popIn 0.3s cubic-bezier(.34,1.56,.64,1) both; }
-    .win-title { font-size: 1.0625rem; font-weight: 700; color: #166534; letter-spacing: -0.01em; }
-    .win-sub   { font-size: 0.8125rem; color: #15803d; margin-top: var(--s1); font-weight: 500; }
+    .win-banner.visible { display: block; animation: popIn 0.35s cubic-bezier(.34,1.56,.64,1) both; }
 
-    [data-theme="dark"] .win-title { color: #86efac; }
-    [data-theme="dark"] .win-sub   { color: #6ee7b7; }
+    .win-title { font-size: 1.1rem; font-weight: 800; color: #1b4332; letter-spacing: -0.01em; }
+    .win-sub   { font-size: 0.8125rem; color: #2d6a4f; margin-top: var(--s1); font-weight: 500; }
 
-    /* Daily challenge badge inside win banner */
+    [data-theme="dark"] .win-title { color: #b7e4c7; }
+    [data-theme="dark"] .win-sub   { color: #74c69d; }
+
     .win-daily-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s1);
-      font-size: 0.6875rem;
-      font-weight: 700;
-      color: #166534;
-      background: rgba(34,197,94,.15);
-      border: 1px solid rgba(34,197,94,.3);
-      border-radius: 99px;
-      padding: 2px var(--s3);
-      margin-top: var(--s2);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
+      display: inline-flex; align-items: center; gap: var(--s1);
+      font-size: 0.6875rem; font-weight: 700;
+      color: #1b4332; background: rgba(45,106,79,.15);
+      border: 1px solid rgba(45,106,79,.3); border-radius: 99px;
+      padding: 2px var(--s3); margin-top: var(--s2);
+      letter-spacing: 0.04em; text-transform: uppercase;
     }
 
-    [data-theme="dark"] .win-daily-badge { color: #86efac; }
+    [data-theme="dark"] .win-daily-badge { color: #b7e4c7; }
 
-    /* Beat-your-best nudge */
     .win-personal-best {
-      display: none;
-      margin-top: var(--s3);
-      padding: var(--s3) var(--s4);
-      background: rgba(255,255,255,.5);
-      border-radius: var(--radius-sm);
-      font-size: 0.75rem;
-      color: #166534;
-      line-height: 1.6;
-      text-align: left;
+      display: none; margin-top: var(--s3); padding: var(--s3) var(--s4);
+      background: rgba(255,255,255,.5); border-radius: var(--radius-sm);
+      font-size: 0.75rem; color: #1b4332; line-height: 1.6; text-align: left;
     }
 
-    [data-theme="dark"] .win-personal-best {
-      background: rgba(255,255,255,.05);
-      color: #6ee7b7;
-    }
-
+    [data-theme="dark"] .win-personal-best { background: rgba(255,255,255,.05); color: #74c69d; }
     .win-personal-best.visible { display: block; }
 
-    .win-pb-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: var(--s3);
-    }
-
-    .win-pb-label { color: #15803d; font-weight: 500; }
-    [data-theme="dark"] .win-pb-label { color: #5eead4; }
-
+    .win-pb-row { display: flex; justify-content: space-between; align-items: center; gap: var(--s3); }
+    .win-pb-label { color: #2d6a4f; font-weight: 500; }
+    [data-theme="dark"] .win-pb-label { color: #52b788; }
     .win-pb-val { font-weight: 700; }
-    .win-pb-new {                              /* highlight when a new record is set */
-      color: #d97706;
-      font-size: 0.625rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      background: #fef3c7;
-      border-radius: 99px;
-      padding: 1px 6px;
+
+    .win-pb-new {
+      color: #92400e; font-size: 0.625rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.06em;
+      background: #fef3c7; border-radius: 99px; padding: 1px 6px;
     }
 
     [data-theme="dark"] .win-pb-new { background: rgba(245,158,11,.2); color: #fcd34d; }
 
-    /* Share + Try Again action row */
     .win-actions {
-      display: flex;
-      gap: var(--s2);
-      margin-top: var(--s3);
-      justify-content: center;
-      flex-wrap: wrap;
+      display: flex; gap: var(--s2); margin-top: var(--s3);
+      justify-content: center; flex-wrap: wrap;
     }
 
     .btn-share {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s2);
-      background: #166534;
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-md);
-      padding: var(--s2) var(--s4);
-      min-height: 40px;
-      font-family: var(--font);
-      font-size: 0.8125rem;
-      font-weight: 600;
-      cursor: pointer;
+      display: inline-flex; align-items: center; gap: var(--s2);
+      background: #1b4332; color: #fff; border: none;
+      border-radius: var(--radius-md); padding: var(--s2) var(--s4);
+      min-height: 40px; font-family: var(--font); font-size: 0.8125rem;
+      font-weight: 600; cursor: pointer;
       transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
-      box-shadow: 0 2px 8px rgba(22,101,52,.25);
-      touch-action: manipulation;
+      box-shadow: 0 2px 8px rgba(27,67,50,.3); touch-action: manipulation;
     }
 
-    .btn-share:hover  { background: #14532d; box-shadow: 0 4px 16px rgba(22,101,52,.35); }
+    .btn-share:hover  { background: #081c15; box-shadow: 0 4px 16px rgba(27,67,50,.4); }
     .btn-share:active { transform: scale(0.97); }
-
-    [data-theme="dark"] .btn-share { background: #16a34a; }
-    [data-theme="dark"] .btn-share:hover { background: #15803d; }
-
-    .btn-share.copied {
-      background: #0d9488;
-      box-shadow: 0 2px 8px rgba(13,148,136,.3);
-    }
+    [data-theme="dark"] .btn-share { background: #2d6a4f; }
+    [data-theme="dark"] .btn-share:hover { background: #1b4332; }
+    .btn-share.copied { background: #0d9488; }
 
     .btn-try-again {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s2);
-      background: transparent;
-      color: #166534;
-      border: 1px solid #86efac;
-      border-radius: var(--radius-md);
-      padding: var(--s2) var(--s4);
-      min-height: 40px;
-      font-family: var(--font);
-      font-size: 0.8125rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background 0.15s, transform 0.1s;
+      display: inline-flex; align-items: center; gap: var(--s2);
+      background: transparent; color: #1b4332;
+      border: 1px solid #74c69d; border-radius: var(--radius-md);
+      padding: var(--s2) var(--s4); min-height: 40px;
+      font-family: var(--font); font-size: 0.8125rem; font-weight: 600;
+      cursor: pointer; transition: background 0.15s, transform 0.1s;
       touch-action: manipulation;
     }
 
-    .btn-try-again:hover  { background: rgba(34,197,94,.1); }
+    .btn-try-again:hover  { background: rgba(116,198,157,.15); }
     .btn-try-again:active { transform: scale(0.97); }
-
-    [data-theme="dark"] .btn-try-again { color: #86efac; border-color: rgba(134,239,172,.4); }
-
-    /* Daily mode indicator in meta row */
-    .daily-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: var(--s1);
-      font-size: 0.6875rem;
-      font-weight: 700;
-      color: var(--primary-text);
-      background: var(--primary-faint);
-      border: 1px solid rgba(99,102,241,.25);
-      border-radius: 99px;
-      padding: 2px var(--s3);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-    }
+    [data-theme="dark"] .btn-try-again { color: #74c69d; border-color: rgba(116,198,157,.4); }
 
     /* ── Divider ── */
     .divider { border: none; border-top: 1px solid var(--border); margin: var(--s4) 0; }
 
     /* ── History ── */
     .history-label {
-      font-size: 0.6875rem;
-      font-weight: 700;
-      color: var(--text-faint);
-      text-transform: uppercase;
-      letter-spacing: 0.1em;
-      margin-bottom: var(--s2);
+      font-size: 0.6875rem; font-weight: 700; color: var(--text-faint);
+      text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: var(--s2);
     }
 
     .history-list {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: var(--s2);
-      /*
-       * Fixed max-height with scroll keeps the card from growing
-       * infinitely on mobile; user scrolls within the list, not the page.
-       */
-      max-height: 300px;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding-right: var(--s1);
-      /* smooth momentum scrolling on iOS */
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior: contain;
+      list-style: none; display: flex; flex-direction: column;
+      gap: var(--s2); max-height: 300px;
+      overflow-y: auto; overflow-x: hidden; padding-right: var(--s1);
+      -webkit-overflow-scrolling: touch; overscroll-behavior: contain;
     }
 
     .history-list::-webkit-scrollbar       { width: 3px; }
@@ -806,49 +697,38 @@
     .history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
 
     .history-item {
-      display: flex;
-      align-items: center;
-      gap: var(--s3);
+      display: flex; align-items: center; gap: var(--s3);
       padding: var(--s3) var(--s4);
       background: var(--surface);
       border: 1px solid var(--border);
-      border-left: 3px solid var(--border-mid);
+      border-left: 4px solid var(--border-mid);
       border-radius: var(--radius-md);
-      animation: slideIn 0.18s ease both;
+      animation: springIn 0.35s cubic-bezier(.34,1.56,.64,1) both;
       transition: box-shadow 0.15s, background 0.3s;
     }
 
-    /* heat-map left border by bull count */
+    .history-item:hover { box-shadow: 0 3px 10px rgba(0,0,0,.08); }
+
+    /* heat-map left border */
     .history-item[data-bulls="0"] { border-left-color: var(--border-mid); }
     .history-item[data-bulls="1"] { border-left-color: #6ee7b7; }
     .history-item[data-bulls="2"] { border-left-color: #fcd34d; }
     .history-item[data-bulls="3"] { border-left-color: #fb923c; }
     .history-item[data-bulls="4"] { border-left-color: #22c55e; background: rgba(34,197,94,.06); }
 
-    .history-item.latest  { border-color: rgba(99,102,241,.4); border-left-color: var(--primary); background: var(--primary-faint); }
-    .history-item.win-row { border-color: rgba(134,239,172,.5); border-left-color: #22c55e; background: rgba(34,197,94,.06); }
+    .history-item.latest  { border-color: rgba(45,106,79,.4); border-left-color: var(--primary); background: var(--primary-faint); }
+    .history-item.win-row { border-color: rgba(116,198,157,.6); border-left-color: #22c55e; background: rgba(34,197,94,.07); }
 
     .h-idx   { font-size: 0.6875rem; font-weight: 600; color: var(--text-placeholder); min-width: 20px; flex-shrink: 0; }
-    .h-num   { font-family: var(--font); font-size: 1rem; font-weight: 700; color: var(--text-strong); letter-spacing: 0.15em; flex: 1; min-width: 0; }
+    .h-num   { font-family: var(--font); font-size: 1rem; font-weight: 700; color: var(--text-strong); letter-spacing: 0.18em; flex: 1; min-width: 0; }
     .h-arrow { color: var(--border-mid); font-size: 0.75rem; flex-shrink: 0; }
 
-    .h-result {
-      display: flex;
-      gap: var(--s2);
-      flex-shrink: 0;
-      /* wrap chips if card is very narrow */
-      flex-wrap: wrap;
-      justify-content: flex-end;
-    }
+    .h-result { display: flex; gap: var(--s2); flex-shrink: 0; flex-wrap: wrap; justify-content: flex-end; }
 
     .chip {
-      display: inline-flex;
-      align-items: center;
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: var(--s1) var(--s3);
-      border-radius: 99px;
-      white-space: nowrap;
+      display: inline-flex; align-items: center;
+      font-size: 0.75rem; font-weight: 600;
+      padding: var(--s1) var(--s3); border-radius: 99px; white-space: nowrap;
     }
 
     .chip-bull { background: var(--bull-faint); color: var(--bull-text); border: 1px solid var(--bull-border); }
@@ -861,274 +741,265 @@
        PRIVACY MODAL
     ═══════════════════════════════════════════════════ */
     .modal-overlay {
-      position: fixed;
-      inset: 0;
-      background: var(--modal-overlay);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 200;
-      padding: var(--s4);
-      backdrop-filter: blur(4px);
-      -webkit-backdrop-filter: blur(4px);
-      animation: fadeIn 0.2s ease;
-      /* allow scrolling modal itself on very small screens */
-      overflow-y: auto;
+      position: fixed; inset: 0; background: var(--modal-overlay);
+      display: flex; align-items: center; justify-content: center;
+      z-index: 200; padding: var(--s4);
+      backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease; overflow-y: auto;
     }
 
     .modal-overlay.hidden { display: none; }
 
     .modal {
-      background: var(--modal-bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      width: 100%;
-      max-width: 420px;
-      /* cap height so modal doesn't overflow on landscape phones */
+      background: var(--modal-bg); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); width: 100%; max-width: 420px;
       max-height: calc(100vh - var(--s7));
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      overflow-y: auto; -webkit-overflow-scrolling: touch;
       box-shadow: 0 24px 64px rgba(0,0,0,.2);
       animation: popIn 0.25s cubic-bezier(.34,1.56,.64,1);
     }
 
     .modal-stripe {
-      height: 4px;
-      background: linear-gradient(90deg, #4f46e5, #7c3aed, #0d9488);
-      position: sticky;
-      top: 0;
+      height: 5px;
+      background: linear-gradient(90deg, #2d6a4f, #52b788, #f59e0b, #b45309);
+      position: sticky; top: 0;
     }
 
     .modal-body { padding: var(--s5); }
 
     .modal-title {
-      font-size: 1.0625rem;
-      font-weight: 800;
-      color: var(--text-strong);
-      margin-bottom: var(--s3);
-      display: flex;
-      align-items: center;
-      gap: var(--s2);
+      font-size: 1.0625rem; font-weight: 800; color: var(--text-strong);
+      margin-bottom: var(--s3); display: flex; align-items: center; gap: var(--s2);
     }
 
     .modal-text { font-size: 0.8125rem; color: var(--text-muted); line-height: 1.65; margin-bottom: var(--s4); }
 
-    .modal-facts {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: var(--s2);
-      margin-bottom: var(--s4);
-    }
+    .modal-facts { list-style: none; display: flex; flex-direction: column; gap: var(--s2); margin-bottom: var(--s4); }
 
     .modal-facts li {
-      display: flex;
-      align-items: flex-start;
-      gap: var(--s2);
-      font-size: 0.8125rem;
-      color: var(--text-base);
-      line-height: 1.5;
+      display: flex; align-items: flex-start; gap: var(--s2);
+      font-size: 0.8125rem; color: var(--text-base); line-height: 1.5;
     }
 
     .fact-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
 
     .modal-note {
-      font-size: 0.75rem;
-      color: var(--text-faint);
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: var(--radius-md);
-      padding: var(--s3) var(--s4);
-      margin-bottom: var(--s4);
-      line-height: 1.55;
+      font-size: 0.75rem; color: var(--text-faint); background: var(--bg);
+      border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: var(--s3) var(--s4); margin-bottom: var(--s4); line-height: 1.55;
     }
 
     .modal-note strong { color: var(--text-muted); }
-
     .modal-footer { display: flex; justify-content: flex-end; }
 
     .btn-got-it {
-      background: var(--primary);
-      color: #fff;
-      border: none;
-      border-radius: var(--radius-md);
-      padding: var(--s3) var(--s5);
-      min-height: 44px; /* touch target */
-      font-family: var(--font);
-      font-size: 0.875rem;
-      font-weight: 600;
-      cursor: pointer;
-      touch-action: manipulation;
+      background: var(--primary); color: #fff; border: none;
+      border-radius: var(--radius-md); padding: var(--s3) var(--s5);
+      min-height: 44px; font-family: var(--font); font-size: 0.875rem;
+      font-weight: 600; cursor: pointer; touch-action: manipulation;
       transition: background 0.15s, transform 0.1s;
     }
 
     .btn-got-it:hover  { background: var(--primary-dark); }
     .btn-got-it:active { transform: scale(0.97); }
 
+    /* ── SVG calendar icon ── */
+    .icon-calendar {
+      display: inline-block; width: 14px; height: 14px; flex-shrink: 0;
+      background-color: currentColor;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+      -webkit-mask-size: contain; mask-size: contain;
+      -webkit-mask-repeat: no-repeat; mask-repeat: no-repeat;
+      -webkit-mask-position: center; mask-position: center;
+      vertical-align: middle;
+    }
+
     /* ═══════════════════════════════════════════════════
-       RESPONSIVE BREAKPOINTS
+       FIRST-GUESS TOOLTIP
     ═══════════════════════════════════════════════════ */
+    .fgt-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 150;
+      pointer-events: all;
+    }
 
-    /*
-     * ── DESKTOP / LARGE TABLET LANDSCAPE (≥ 769px) ──
-     * Side-by-side layout, full padding, larger font sizes.
-     * This is already the default above.
-     */
+    /* This is the fix — hidden class must explicitly hide the overlay */
+    .fgt-overlay.hidden { display: none; }
 
-    /*
-     * ── TABLET PORTRAIT & SMALL LAPTOP (481px – 768px) ──
-     * Still single-column, but more space than mobile.
-     */
+    .fgt-box.no-arrow::before { display: none; }
+
+    .fgt-box {
+      position: absolute;
+      top: -9999px;  /* off-screen until JS positions it — prevents flash at 0,0 */
+      left: -9999px;
+      background: var(--surface);
+      border: 1.5px solid var(--primary);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 8px 32px rgba(45,106,79,.18), 0 2px 8px rgba(0,0,0,.08);
+      padding: var(--s4) var(--s5);
+      max-width: 280px;
+      pointer-events: all;
+      animation: none; /* animation runs only when tooltip is shown via JS */
+    }
+
+    .fgt-box.visible {
+      animation: popIn 0.3s cubic-bezier(.34,1.56,.64,1) both;
+    }
+
+    /* Arrow pointing up toward the history row */
+    .fgt-box::before {
+      content: '';
+      position: absolute;
+      top: -8px;
+      left: 28px;
+      width: 14px; height: 14px;
+      background: var(--surface);
+      border-left: 1.5px solid var(--primary);
+      border-top: 1.5px solid var(--primary);
+      transform: rotate(45deg);
+    }
+
+    .fgt-title {
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: var(--text-strong);
+      margin-bottom: var(--s2);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+    }
+
+    .fgt-body {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .fgt-body .fgt-bull {
+      font-weight: 700;
+      color: var(--bull-text);
+      background: var(--bull-faint);
+      border: 1px solid var(--bull-border);
+      border-radius: 4px;
+      padding: 0 5px;
+    }
+
+    .fgt-body .fgt-cow {
+      font-weight: 700;
+      color: var(--cow-text);
+      background: var(--cow-faint);
+      border: 1px solid var(--cow-border);
+      border-radius: 4px;
+      padding: 0 5px;
+    }
+
+    .fgt-dismiss {
+      margin-top: var(--s3);
+      display: flex;
+      justify-content: flex-end;
+    }
+
+    .fgt-dismiss button {
+      font-family: var(--font);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary-text);
+      background: var(--primary-faint);
+      border: 1px solid rgba(45,106,79,.2);
+      border-radius: 99px;
+      padding: 4px var(--s3);
+      cursor: pointer;
+      min-height: 36px;
+      min-width: 44px;
+      transition: background 0.15s;
+    }
+
+    .fgt-dismiss button:hover { background: var(--primary); color: #fff; }
     @media (max-width: 768px) {
       .lb-card { flex: 0 0 240px; width: 240px; }
     }
 
-    /*
-     * ── STACK COLUMNS (≤ 680px) ──
-     * Leaderboard moves below the game card.
-     * Toggle label hidden to save horizontal space.
-     */
     @media (max-width: 680px) {
-      .layout {
-        flex-direction: column;
-        align-items: stretch;
-      }
-
-      .card, .lb-card {
-        width: 100%;
-        flex: none;
-      }
-
+      .layout { flex-direction: column; align-items: stretch; }
+      .card, .lb-card { width: 100%; flex: none; }
       .toggle-label { display: none; }
-
-      /* tighten game-body padding */
-      .game-body { padding: var(--s4); }
-
-      /* tighten how-toggle padding */
+      .game-body { padding: var(--s4); display: flex; flex-direction: column; }
+      .win-banner    { order: 1; }
+      .meta-row      { order: 2; }
+      .history-label { order: 3; }
+      .history-list  { order: 4; max-height: 200px; flex-direction: column-reverse; }
+      .divider       { order: 5; }
+      .tiles-container { order: 6; }
+      .error-box     { order: 7; margin-bottom: 0; }
       .how-toggle { padding: var(--s3) var(--s4); }
       .how-body   { padding: 0 var(--s4) var(--s4); }
+      .tile { width: 56px; height: 60px; }
     }
 
-    /*
-     * ── MOBILE (≤ 480px) ──
-     * Compact everything. Larger tap targets already set via min-height.
-     */
     @media (max-width: 480px) {
       :root { --input-h: 48px; }
-
       body { padding: var(--s4) var(--s3) var(--s6); }
-
       header { margin-bottom: var(--s4); }
-
-      /* full-width modal, hug edges */
       .modal { max-width: 100%; border-radius: var(--radius-md); }
-
-      /* narrow chip gap */
       .h-result { gap: var(--s1); }
-
-      /* shrink chip font a touch */
       .chip { font-size: 0.6875rem; padding: 2px var(--s2); }
-
-      /* history list slightly shorter so win banner stays visible */
-      .history-list { max-height: 240px; }
-
-      /* meta badges stack if very narrow */
+      .history-list { max-height: 180px; }
       .meta-badges { gap: var(--s2); }
       .guess-badge { font-size: 0.6875rem; }
-
-      /* lb row tighter */
       .lb-row { padding: var(--s2); gap: var(--s1); }
       .lb-stat-val { font-size: 0.75rem; }
       .lb-score-val { font-size: 0.875rem; }
+      .tile { width: 52px; height: 56px; }
     }
 
-    /*
-     * ── VERY SMALL (≤ 360px) ──
-     * Minimum viable layout for 360×640 devices (e.g. older Android).
-     */
     @media (max-width: 360px) {
-      .logo { font-size: 1.4rem; }
-
-      /* hide the arrow label on history rows to save space */
+      .logo { font-size: 1.3rem; }
       .h-arrow { display: none; }
-
-      /* hide index number to gain more width for guess + chips */
       .h-idx { display: none; }
-
       .chip { font-size: 0.625rem; padding: 2px 6px; }
+      .tile { width: 46px; height: 50px; }
+      .tile .tile-front, .tile .tile-back { font-size: 1.5rem; }
     }
 
-    /*
-     * ── LANDSCAPE PHONES (short viewport, wide) ──
-     * Reduce vertical spacing so content fits without scrolling.
-     */
     @media (max-height: 600px) and (orientation: landscape) {
       body { padding: var(--s3) var(--s4); }
       header { margin-bottom: var(--s3); }
       .game-body { padding: var(--s3) var(--s4); }
-      .history-list { max-height: 160px; }
+      .history-list { max-height: 140px; }
       .win-banner { padding: var(--s3) var(--s4); margin-bottom: var(--s3); }
       .modal { max-height: calc(100vh - var(--s5)); }
     }
 
-    /*
-     * ── LARGE DESKTOP (≥ 1280px) ──
-     * Slightly increase font sizes for comfortable reading distance.
-     */
     @media (min-width: 1280px) {
       body { font-size: 15px; }
       .layout { max-width: 860px; }
       header { max-width: 860px; }
     }
 
-    /* ── SVG calendar icon (no number) ── */
-    .icon-calendar {
-      display: inline-block;
-      width: 14px;
-      height: 14px;
-      flex-shrink: 0;
-      background-color: currentColor;
-      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
-      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
-      -webkit-mask-size: contain;
-      mask-size: contain;
-      -webkit-mask-repeat: no-repeat;
-      mask-repeat: no-repeat;
-      -webkit-mask-position: center;
-      mask-position: center;
-      vertical-align: middle;
-    }
-
-    /* ── Mobile game-body layout: history above input ── */
-    @media (max-width: 680px) {
-      .game-body {
-        display: flex;
-        flex-direction: column;
-      }
-      /* Reorder sections: win banner → meta → history → divider → input → error */
-      .win-banner     { order: 1; }
-      .meta-row       { order: 2; }
-      .history-label  { order: 3; }
-      .history-list   { order: 4; max-height: 220px; flex-direction: column-reverse; }
-      .divider        { order: 5; }
-      .input-row      { order: 6; }
-      .error-box      { order: 7; margin-bottom: 0; }
-      /* Scroll newest guess into view — handled via JS */
-    }
+    /* ═══════════════════════════════════════════════════
+       ANIMATIONS
+    ═══════════════════════════════════════════════════ */
+    @keyframes fadeIn    { from { opacity: 0; } to { opacity: 1; } }
     @keyframes fadeSlide { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
     @keyframes slideIn   { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
-    @keyframes popIn     { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+    @keyframes springIn  {
+      from { opacity: 0; transform: translateY(8px) scale(0.96); }
+      60%  { transform: translateY(-2px) scale(1.01); }
+      to   { opacity: 1; transform: none; }
+    }
+    @keyframes popIn     { from { opacity: 0; transform: scale(.88); } to { opacity: 1; transform: none; } }
     @keyframes shake {
       0%,100% { transform: none; }
-      20%     { transform: translateX(-5px); }
-      40%     { transform: translateX(5px); }
-      60%     { transform: translateX(-3px); }
-      80%     { transform: translateX(3px); }
+      20%     { transform: translateX(-6px); }
+      40%     { transform: translateX(6px); }
+      60%     { transform: translateX(-4px); }
+      80%     { transform: translateX(4px); }
     }
 
     .shake { animation: shake 0.3s ease; }
 
-    /* ── Reduced motion (accessibility) ── */
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
         animation-duration: 0.01ms !important;
@@ -1144,24 +1015,16 @@
     <div class="modal">
       <div class="modal-stripe"></div>
       <div class="modal-body">
-        <div class="modal-title">
-          <span>🔒</span>
-          <span id="modalTitle">Your Privacy is Safe</span>
-        </div>
-        <p class="modal-text">
-          Before you play, here's exactly what this game does — and doesn't — do with your device.
-        </p>
+        <div class="modal-title"><span>🔒</span><span id="modalTitle">Your Privacy is Safe</span></div>
+        <p class="modal-text">Before you play, here's exactly what this game does — and doesn't — do with your device.</p>
         <ul class="modal-facts">
           <li><span class="fact-icon">✅</span><span>Your <strong>top 5 scores</strong> are saved locally in your browser's <code>localStorage</code> — tiny plain text, nothing else.</span></li>
-          <li><span class="fact-icon">✅</span><span><strong>No data ever leaves your device.</strong> There's no server, no internet request, no account.</span></li>
+          <li><span class="fact-icon">✅</span><span><strong>No data ever leaves your device.</strong> No server, no internet request, no account.</span></li>
           <li><span class="fact-icon">✅</span><span><strong>No cookies.</strong> No ads. No analytics. No third-party scripts of any kind.</span></li>
-          <li><span class="fact-icon">✅</span><span>Nothing runs in the background. The game is completely idle when you're not playing.</span></li>
-          <li><span class="fact-icon">✅</span><span>You can erase your scores anytime using the <strong>Clear</strong> button in the scoreboard.</span></li>
+          <li><span class="fact-icon">✅</span><span>Nothing runs in the background. Completely idle when you're not playing.</span></li>
+          <li><span class="fact-icon">✅</span><span>Erase your scores anytime using the <strong>Clear</strong> button in the scoreboard.</span></li>
         </ul>
-        <div class="modal-note">
-          <strong>In short:</strong> This is just a game. It's as safe as opening a text file.
-          Your device, your data, your control — always.
-        </div>
+        <div class="modal-note"><strong>In short:</strong> This is just a game. As safe as opening a text file.</div>
         <div class="modal-footer">
           <button class="btn-got-it" onclick="dismissPrivacy()">Got it, let's play! 🎯</button>
         </div>
@@ -1172,9 +1035,50 @@
   <!-- ── Header ── -->
   <header>
     <div class="header-title">
-      <div class="logo">🐮 Cows &amp; Bulls 🐂</div>
+      <div class="logo-row">
+        <!-- Cow mascot SVG -->
+        <svg class="mascot" viewBox="0 0 42 46" width="42" height="46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M9 14 Q5 5 11 9" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M33 14 Q37 5 31 9" stroke="#92400e" stroke-width="2.5" stroke-linecap="round"/>
+          <ellipse cx="5" cy="21" rx="4" ry="3" fill="#f5f0e8" stroke="#d4c5b2" stroke-width="1.5"/>
+          <ellipse cx="37" cy="21" rx="4" ry="3" fill="#f5f0e8" stroke="#d4c5b2" stroke-width="1.5"/>
+          <ellipse cx="21" cy="26" rx="18" ry="16" fill="#f5f0e8" stroke="#d4c5b2" stroke-width="1.5"/>
+          <ellipse cx="13" cy="20" rx="5" ry="3.5" fill="#d4c5b2" opacity="0.55"/>
+          <ellipse cx="28" cy="23" rx="3.5" ry="3" fill="#d4c5b2" opacity="0.55"/>
+          <circle cx="14.5" cy="23" r="3.5" fill="white" stroke="#3d2c1e" stroke-width="1"/>
+          <circle cx="27.5" cy="23" r="3.5" fill="white" stroke="#3d2c1e" stroke-width="1"/>
+          <circle cx="15" cy="23" r="1.8" fill="#1c1208"/>
+          <circle cx="28" cy="23" r="1.8" fill="#1c1208"/>
+          <circle cx="15.6" cy="22.4" r="0.7" fill="white"/>
+          <circle cx="28.6" cy="22.4" r="0.7" fill="white"/>
+          <ellipse cx="21" cy="34" rx="7.5" ry="5.5" fill="#ffb3c1"/>
+          <circle cx="18" cy="35.5" r="1.8" fill="#ff8fa3"/>
+          <circle cx="24" cy="35.5" r="1.8" fill="#ff8fa3"/>
+        </svg>
+
+        <div class="logo">Cows &amp; Bulls</div>
+
+        <!-- Bull mascot SVG -->
+        <svg class="mascot" viewBox="0 0 42 46" width="42" height="46" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <path d="M8 15 Q2 3 11 9" stroke="#6b4226" stroke-width="3" stroke-linecap="round"/>
+          <path d="M34 15 Q40 3 31 9" stroke="#6b4226" stroke-width="3" stroke-linecap="round"/>
+          <ellipse cx="5" cy="22" rx="4" ry="3" fill="#c4872a" stroke="#8b5e1a" stroke-width="1.5"/>
+          <ellipse cx="37" cy="22" rx="4" ry="3" fill="#c4872a" stroke="#8b5e1a" stroke-width="1.5"/>
+          <ellipse cx="21" cy="26" rx="17" ry="15" fill="#c4872a" stroke="#8b5e1a" stroke-width="1.5"/>
+          <circle cx="14" cy="23" r="3.5" fill="white" stroke="#3d2c1e" stroke-width="1"/>
+          <circle cx="28" cy="23" r="3.5" fill="white" stroke="#3d2c1e" stroke-width="1"/>
+          <circle cx="14.5" cy="23.5" r="2" fill="#1c1208"/>
+          <circle cx="28.5" cy="23.5" r="2" fill="#1c1208"/>
+          <circle cx="15.2" cy="22.8" r="0.7" fill="white"/>
+          <circle cx="29.2" cy="22.8" r="0.7" fill="white"/>
+          <ellipse cx="21" cy="34" rx="8.5" ry="6" fill="#a0522d"/>
+          <ellipse cx="17.5" cy="35" rx="2.2" ry="1.8" fill="#6b3a1f"/>
+          <ellipse cx="24.5" cy="35" rx="2.2" ry="1.8" fill="#6b3a1f"/>
+        </svg>
+      </div>
       <div class="tagline">A 4-digit deduction game</div>
     </div>
+
     <div class="header-controls">
       <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Switch to dark mode">
         <span class="toggle-icon" id="themeIcon">🌙</span>
@@ -1207,8 +1111,8 @@
           </p>
           <div class="how-example">
             <strong>Example:</strong> Secret is <strong>1234</strong>, you guess <strong>1243</strong><br/>
-            → <span class="pill pill-bull">2 Bulls</span> (1 &amp; 2 are in the right spot)
-            &nbsp;<span class="pill pill-cow">2 Cows</span> (3 &amp; 4 are right digits, wrong spots)
+            → <span class="pill pill-bull">2 Bulls</span> (1 &amp; 2 right spot)
+            &nbsp;<span class="pill pill-cow">2 Cows</span> (3 &amp; 4 wrong spot)
           </div>
           <p style="margin-top:12px;">Find the number in as few guesses as possible. Good luck! 🎯</p>
         </div>
@@ -1221,28 +1125,13 @@
         <div class="win-banner" id="winBanner">
           <div class="win-title" id="winTitle">🎉 You cracked it!</div>
           <div class="win-sub" id="winSub"></div>
-          <div class="win-daily-badge" id="winDailyBadge" style="display:none"><span class="icon-calendar"></span> Daily Challenge</div>
-
-          <!-- Beat-your-best nudge -->
           <div class="win-personal-best" id="winPB">
-            <div class="win-pb-row">
-              <span class="win-pb-label">Your best</span>
-              <span class="win-pb-val" id="pbBest">—</span>
-            </div>
-            <div class="win-pb-row">
-              <span class="win-pb-label">This game</span>
-              <span class="win-pb-val" id="pbThis"></span>
-            </div>
+            <div class="win-pb-row"><span class="win-pb-label">Your best</span><span class="win-pb-val" id="pbBest">—</span></div>
+            <div class="win-pb-row"><span class="win-pb-label">This game</span><span class="win-pb-val" id="pbThis"></span></div>
           </div>
-
-          <!-- Actions -->
           <div class="win-actions">
-            <button class="btn-share" id="shareBtn" onclick="shareResult()">
-              ↗ Share result
-            </button>
-            <button class="btn-try-again" onclick="newGame()">
-              ↺ Try again
-            </button>
+            <button class="btn-share" id="shareBtn" onclick="shareResult()">↗ Share result</button>
+            <button class="btn-try-again" onclick="newGame()">↺ Try again</button>
           </div>
         </div>
 
@@ -1251,29 +1140,46 @@
           <div class="meta-badges">
             <div class="guess-badge">Guesses <span class="count" id="guessCounter">0</span></div>
             <div class="guess-badge">Time <span class="count" id="timer">0:00</span></div>
-            <span class="daily-badge" id="dailyBadge" style="display:none"><span class="icon-calendar"></span> Daily</span>
           </div>
-          <div style="display:flex;gap:var(--s2);align-items:center;">
-            <button class="btn btn-secondary" id="dailyBtn" onclick="toggleDailyMode()" title="Daily Challenge" aria-label="Toggle Daily Challenge">
-              <span class="icon-calendar"></span><span style="margin-left:4px">Daily</span>
-            </button>
-            <button class="btn btn-secondary" onclick="newGame()">↺ New Game</button>
-          </div>
+          <button class="btn btn-secondary" onclick="newGame()">↺ New Game</button>
         </div>
 
-        <!-- Input -->
-        <div class="input-row">
-          <input
-            type="text"
-            class="guess-input"
-            id="guessInput"
-            maxlength="4"
-            placeholder="· · · ·"
-            inputmode="numeric"
-            autocomplete="off"
-            spellcheck="false"
-          />
-          <button class="btn btn-primary" id="submitBtn" onclick="submitGuess()">Guess</button>
+        <!-- Digit tiles + Guess button -->
+        <div class="tiles-container" id="tilesContainer">
+          <div class="tiles-and-btn">
+            <div class="tiles-row" id="tilesRow">
+              <div class="tile active" id="tile-0">
+                <div class="tile-inner">
+                  <div class="tile-front"><span class="tile-digit" id="td-0"></span></div>
+                  <div class="tile-back" id="tb-0"></div>
+                </div>
+              </div>
+              <div class="tile" id="tile-1">
+                <div class="tile-inner">
+                  <div class="tile-front"><span class="tile-digit" id="td-1"></span></div>
+                  <div class="tile-back" id="tb-1"></div>
+                </div>
+              </div>
+              <div class="tile" id="tile-2">
+                <div class="tile-inner">
+                  <div class="tile-front"><span class="tile-digit" id="td-2"></span></div>
+                  <div class="tile-back" id="tb-2"></div>
+                </div>
+              </div>
+              <div class="tile" id="tile-3">
+                <div class="tile-inner">
+                  <div class="tile-front"><span class="tile-digit" id="td-3"></span></div>
+                  <div class="tile-back" id="tb-3"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Guess button sits beside tiles -->
+            <button class="btn btn-primary" id="submitBtn" onclick="submitGuess()">Guess</button>
+          </div>
+          <!-- Hidden input captures keystrokes -->
+          <input type="text" id="guessInput" class="hidden-tile-input"
+            maxlength="4" inputmode="numeric" autocomplete="off" spellcheck="false"
+            aria-label="Enter your 4-digit guess" />
         </div>
 
         <!-- Error -->
@@ -1302,20 +1208,30 @@
 
   </div><!-- /layout -->
 
+  <!-- ── First-guess tooltip ── -->
+  <div class="fgt-overlay hidden" id="fgtOverlay">
+    <div class="fgt-box" id="fgtBox">
+      <div class="fgt-title">💡 What does this mean?</div>
+      <div class="fgt-body" id="fgtBody"></div>
+      <div class="fgt-dismiss">
+        <button onclick="dismissTooltip()">Got it ✓</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    let secret   = '';
-    let guesses  = [];
-    let gameOver = false;
+    let secret    = '';
+    let guesses   = [];
+    let gameOver  = false;
     let startTime = Date.now();
     let timerInterval;
 
     // ══════════════════════════════════════════════════════
     // SOUND & HAPTIC ENGINE
     // ══════════════════════════════════════════════════════
-    let audioCtx  = null;   // lazy — created on first user gesture
-    let isMuted   = localStorage.getItem('muted') === '1';
+    let audioCtx = null;
+    let isMuted  = localStorage.getItem('muted') === '1';
 
-    // Apply persisted mute state to button on load
     function syncMuteUI() {
       const btn   = document.getElementById('muteToggle');
       const icon  = document.getElementById('muteIcon');
@@ -1330,194 +1246,260 @@
       isMuted = !isMuted;
       localStorage.setItem('muted', isMuted ? '1' : '0');
       syncMuteUI();
-      // Play a tiny confirmation tick so user hears it unmuted
       if (!isMuted) playTick();
     }
 
-    // Lazily create AudioContext on first call (browser autoplay policy)
     function getAudioCtx() {
-      if (!audioCtx) {
-        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-      }
-      // Resume if suspended (mobile browsers suspend until gesture)
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
       if (audioCtx.state === 'suspended') audioCtx.resume();
       return audioCtx;
     }
 
-    /*
-     * Core primitive: schedule one oscillator note.
-     *   freq      — Hz
-     *   type      — 'sine' | 'square' | 'sawtooth' | 'triangle'
-     *   startAt   — AudioContext time to start
-     *   duration  — seconds the note plays
-     *   gainPeak  — peak volume 0–1
-     *   fadeIn    — attack time (seconds)
-     *   fadeOut   — release time (seconds)
-     */
     function scheduleNote(freq, type, startAt, duration, gainPeak = 0.35, fadeIn = 0.005, fadeOut = 0.08) {
       const ctx  = getAudioCtx();
       const osc  = ctx.createOscillator();
       const gain = ctx.createGain();
-
       osc.type = type;
       osc.frequency.setValueAtTime(freq, startAt);
-
       gain.gain.setValueAtTime(0, startAt);
       gain.gain.linearRampToValueAtTime(gainPeak, startAt + fadeIn);
       gain.gain.setValueAtTime(gainPeak, startAt + duration - fadeOut);
       gain.gain.linearRampToValueAtTime(0, startAt + duration);
-
       osc.connect(gain);
       gain.connect(ctx.destination);
       osc.start(startAt);
       osc.stop(startAt + duration + 0.01);
     }
 
-    // ── Individual sounds ────────────────────────────────
-
-    // Short soft click — unmute confirmation
     function playTick() {
       if (isMuted) return;
-      const ctx = getAudioCtx();
-      const t   = ctx.currentTime;
+      const ctx = getAudioCtx(), t = ctx.currentTime;
       scheduleNote(600, 'sine', t, 0.07, 0.2, 0.003, 0.06);
     }
 
-    // Low dull thud — 0 bulls, 0 cows (cold)
     function playCold() {
       if (isMuted) return;
-      const ctx = getAudioCtx();
-      const t   = ctx.currentTime;
+      const ctx = getAudioCtx(), t = ctx.currentTime;
       scheduleNote(130, 'sawtooth', t, 0.18, 0.3, 0.005, 0.15);
     }
 
-    // Warm mid tone — cows only
     function playCow() {
       if (isMuted) return;
-      const ctx = getAudioCtx();
-      const t   = ctx.currentTime;
-      scheduleNote(440, 'sine', t,       0.12, 0.28);
+      const ctx = getAudioCtx(), t = ctx.currentTime;
+      scheduleNote(440, 'sine', t, 0.12, 0.28);
       scheduleNote(520, 'sine', t + 0.1, 0.12, 0.22);
     }
 
-    // Ascending arpeggio — bulls found (n = 1..3)
     function playBulls(n) {
       if (isMuted) return;
-      const ctx = getAudioCtx();
-      const t   = ctx.currentTime;
-      const scales = [
-        [440, 554],
-        [440, 554, 659],
-        [440, 554, 659, 784],
-      ];
-      const notes = scales[Math.min(n, 3) - 1];
-      notes.forEach((freq, i) => {
-        scheduleNote(freq, 'sine', t + i * 0.1, 0.14, 0.3, 0.005, 0.1);
+      const ctx = getAudioCtx(), t = ctx.currentTime;
+      const scales = [[440,554],[440,554,659],[440,554,659,784]];
+      scales[Math.min(n,3)-1].forEach((freq, i) => {
+        scheduleNote(freq, 'sine', t + i*0.1, 0.14, 0.3, 0.005, 0.1);
       });
     }
 
-    // Full win fanfare — 4 bulls
     function playWin() {
       if (isMuted) return;
-      const ctx = getAudioCtx();
-      const t   = ctx.currentTime;
-      [523, 659, 784, 1047].forEach((freq, i) => {
-        scheduleNote(freq, 'sine', t + i * 0.1, 0.35, 0.35, 0.005, 0.25);
+      const ctx = getAudioCtx(), t = ctx.currentTime;
+      [523,659,784,1047].forEach((freq, i) => {
+        scheduleNote(freq, 'sine', t + i*0.1, 0.35, 0.35, 0.005, 0.25);
       });
-      // Shimmer sweep on top
-      const shimmer = ctx.createOscillator();
-      const sGain   = ctx.createGain();
-      shimmer.type  = 'sine';
-      shimmer.frequency.setValueAtTime(1600, t + 0.4);
-      shimmer.frequency.linearRampToValueAtTime(2000, t + 0.8);
-      sGain.gain.setValueAtTime(0, t + 0.4);
-      sGain.gain.linearRampToValueAtTime(0.15, t + 0.45);
-      sGain.gain.linearRampToValueAtTime(0, t + 0.85);
-      shimmer.connect(sGain);
-      sGain.connect(ctx.destination);
-      shimmer.start(t + 0.4);
-      shimmer.stop(t + 0.9);
+      const shimmer = ctx.createOscillator(), sGain = ctx.createGain();
+      shimmer.type = 'sine';
+      shimmer.frequency.setValueAtTime(1600, t+0.4);
+      shimmer.frequency.linearRampToValueAtTime(2000, t+0.8);
+      sGain.gain.setValueAtTime(0, t+0.4);
+      sGain.gain.linearRampToValueAtTime(0.15, t+0.45);
+      sGain.gain.linearRampToValueAtTime(0, t+0.85);
+      shimmer.connect(sGain); sGain.connect(ctx.destination);
+      shimmer.start(t+0.4); shimmer.stop(t+0.9);
     }
 
-    // Short low buzz — invalid input
     function playError() {
       if (isMuted) return;
-      const ctx = getAudioCtx();
-      const t   = ctx.currentTime;
-      scheduleNote(120, 'square', t,       0.08, 0.25, 0.003, 0.06);
-      scheduleNote(100, 'square', t + 0.1, 0.08, 0.2,  0.003, 0.06);
+      const ctx = getAudioCtx(), t = ctx.currentTime;
+      scheduleNote(120, 'square', t, 0.08, 0.25, 0.003, 0.06);
+      scheduleNote(100, 'square', t+0.1, 0.08, 0.2, 0.003, 0.06);
     }
 
-    // Soft descending whoosh — new game
     function playReset() {
       if (isMuted) return;
-      const ctx  = getAudioCtx();
-      const t    = ctx.currentTime;
-      const osc  = ctx.createOscillator();
-      const gain = ctx.createGain();
+      const ctx = getAudioCtx(), t = ctx.currentTime;
+      const osc = ctx.createOscillator(), gain = ctx.createGain();
       osc.type = 'sine';
       osc.frequency.setValueAtTime(800, t);
-      osc.frequency.linearRampToValueAtTime(400, t + 0.22);
+      osc.frequency.linearRampToValueAtTime(400, t+0.22);
       gain.gain.setValueAtTime(0.25, t);
-      gain.gain.linearRampToValueAtTime(0, t + 0.22);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(t);
-      osc.stop(t + 0.25);
+      gain.gain.linearRampToValueAtTime(0, t+0.22);
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.start(t); osc.stop(t+0.25);
     }
 
-    // Mute-check helper used by getCtxIfUnmuted (kept for compatibility)
-    function getCtxIfUnmuted() {
-      if (isMuted) return null;
-      return getAudioCtx();
-    }
-
-    // ── Haptics (Android; silently ignored on iOS) ────────
     function vibrate(pattern) {
-      if (isMuted) return;               // mute suppresses haptics too
-      if ('vibrate' in navigator) {
-        navigator.vibrate(pattern);
-      }
+      if (isMuted) return;
+      if ('vibrate' in navigator) navigator.vibrate(pattern);
     }
 
-    // Convenience haptic presets
     const haptic = {
-      tick:     () => vibrate([30]),
-      cold:     () => vibrate([80]),
-      cow:      () => vibrate([30, 40, 30]),
-      bull:     () => vibrate([30, 30, 50]),
-      win:      () => vibrate([50, 30, 50, 30, 100]),
-      error:    () => vibrate([100, 50, 100]),
-      reset:    () => vibrate([40]),
+      tick:  () => vibrate([30]),
+      cold:  () => vibrate([80]),
+      cow:   () => vibrate([30,40,30]),
+      bull:  () => vibrate([30,30,50]),
+      win:   () => vibrate([50,30,50,30,100]),
+      error: () => vibrate([100,50,100]),
+      reset: () => vibrate([40]),
     };
 
-    /*
-     * Master feedback dispatcher.
-     * Called after each guess with { bulls, cows }.
-     * Picks the right sound + haptic for the result.
-     */
     function playFeedback(bulls, cows) {
-      if (bulls === 4) {
-        playWin();
-        haptic.win();
-      } else if (bulls > 0) {
-        playBulls(bulls);
-        haptic.bull();
-      } else if (cows > 0) {
-        playCow();
-        haptic.cow();
-      } else {
-        playCold();
-        haptic.cold();
+      if (bulls === 4)      { playWin();   haptic.win();  }
+      else if (bulls > 0)   { playBulls(bulls); haptic.bull(); }
+      else if (cows > 0)    { playCow();   haptic.cow();  }
+      else                  { playCold();  haptic.cold(); }
+    }
+
+    // ══════════════════════════════════════════════════════
+    // CONFETTI — farm palette, pure JS
+    // ══════════════════════════════════════════════════════
+    function launchConfetti() {
+      const wrap = document.createElement('div');
+      wrap.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:999;overflow:hidden;';
+      document.body.appendChild(wrap);
+
+      const colors  = ['#2d6a4f','#52b788','#f59e0b','#ef4444','#ffffff','#fbbf24','#b45309','#d8f3dc','#fffbeb'];
+      const shapes  = ['square','rect','circle'];
+      const N       = 100;
+      const particles = [];
+
+      for (let i = 0; i < N; i++) {
+        const el    = document.createElement('div');
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        const shape = shapes[Math.floor(Math.random() * shapes.length)];
+        const size  = 5 + Math.random() * 9;
+
+        el.style.cssText = `
+          position:absolute;
+          width:${shape==='rect'?size*2:size}px;
+          height:${size}px;
+          background:${color};
+          border-radius:${shape==='circle'?'50%':'3px'};
+          will-change:transform;
+        `;
+        wrap.appendChild(el);
+
+        const startX = window.innerWidth * (0.15 + Math.random() * 0.7);
+        const angle  = (Math.random() * 160 - 80) * (Math.PI / 180);
+        const speed  = 5 + Math.random() * 7;
+
+        particles.push({
+          el, x: startX, y: -10,
+          vx: Math.sin(angle) * speed,
+          vy: -(Math.cos(angle) * speed) - 2,
+          rot: Math.random() * 360,
+          rotV: (Math.random() - 0.5) * 10,
+          gravity: 0.22 + Math.random() * 0.12,
+          alive: true
+        });
+      }
+
+      let raf;
+      const tick = () => {
+        let any = false;
+        particles.forEach(p => {
+          if (!p.alive) return;
+          p.vy += p.gravity;
+          p.x  += p.vx;
+          p.y  += p.vy;
+          p.rot += p.rotV;
+          if (p.y > window.innerHeight + 30) { p.alive = false; p.el.remove(); return; }
+          any = true;
+          p.el.style.transform = `translate(${p.x}px,${p.y}px) rotate(${p.rot}deg)`;
+        });
+        if (any) raf = requestAnimationFrame(tick);
+        else     wrap.remove();
+      };
+
+      raf = requestAnimationFrame(tick);
+      setTimeout(() => { cancelAnimationFrame(raf); wrap.remove(); }, 6000);
+    }
+
+    // ══════════════════════════════════════════════════════
+    // TILE SYSTEM
+    // ══════════════════════════════════════════════════════
+
+    // Sync tile display to current input value
+    function syncTiles(val) {
+      for (let i = 0; i < 4; i++) {
+        const tile  = document.getElementById(`tile-${i}`);
+        const digit = document.getElementById(`td-${i}`);
+        const has   = i < val.length;
+        digit.textContent = has ? val[i] : '';
+        tile.classList.toggle('filled', has);
+        tile.classList.toggle('active', i === val.length && !gameOver);
       }
     }
 
-    // ── Score & timer ─────────────────────────────────────────────────────────
+    // Flip tiles as a visual flourish — non-blocking, no callback
+    function animateTiles(val, result) {
+      const STEP = 70;   // ms stagger between tiles — fast, almost simultaneous
+      result.forEach((status, i) => {
+        setTimeout(() => {
+          const tile = document.getElementById(`tile-${i}`);
+          const back = document.getElementById(`tb-${i}`);
+          back.textContent = val[i];
+          // All tiles flip neutral — no per-digit colour leakage
+          back.className   = 'tile-back revealed';
+          tile.classList.add('flipped');
+        }, i * STEP);
+      });
+      // Clear flipped state after animation settles so tiles are clean for next guess
+      setTimeout(() => {
+        for (let i = 0; i < 4; i++) {
+          document.getElementById(`tile-${i}`).classList.remove('flipped');
+        }
+      }, 3 * STEP + 350);
+    }
+
+    // Reset tiles to empty state
+    function resetTiles() {
+      for (let i = 0; i < 4; i++) {
+        const tile  = document.getElementById(`tile-${i}`);
+        const back  = document.getElementById(`tb-${i}`);
+        const digit = document.getElementById(`td-${i}`);
+        tile.classList.remove('flipped', 'filled', 'active');
+        back.textContent = '';
+        back.className   = 'tile-back';
+        digit.textContent = '';
+      }
+      document.getElementById('guessInput').value = '';
+      syncTiles('');
+    }
+
+    function focusTileInput() {
+      if (!gameOver) document.getElementById('guessInput').focus();
+    }
+
+    // Per-digit result — 'bull' | 'cow' | 'miss' for each position
+    function evaluateDetailed(guess, sec) {
+      const result = [];
+      for (let i = 0; i < 4; i++) {
+        if (guess[i] === sec[i])      result.push('bull');
+        else if (sec.includes(guess[i])) result.push('cow');
+        else                          result.push('miss');
+      }
+      const bulls = result.filter(r => r === 'bull').length;
+      const cows  = result.filter(r => r === 'cow').length;
+      return { result, bulls, cows };
+    }
+
+    // ══════════════════════════════════════════════════════
+    // SCORE & TIMER
+    // ══════════════════════════════════════════════════════
     function saveScore(guessesCount, timeTaken) {
-      const score = Math.round((1000 / (guessesCount * Math.max(timeTaken, 1))) * 100) / 100;
+      const score = Math.round((1000 / (guessesCount * Math.max(timeTaken,1))) * 100) / 100;
       let scores = JSON.parse(localStorage.getItem('scores') || '[]');
       scores.push({ guesses: guessesCount, time: timeTaken, score, playedAt: startTime });
-      scores.sort((a, b) => b.score - a.score);
+      scores.sort((a,b) => b.score - a.score);
       scores = scores.slice(0, 5);
       localStorage.setItem('scores', JSON.stringify(scores));
     }
@@ -1526,18 +1508,20 @@
       clearInterval(timerInterval);
       startTime = Date.now();
       timerInterval = setInterval(() => {
-        const s = Math.floor((Date.now() - startTime) / 1000);
-        document.getElementById('timer').textContent = formatTime(s);
+        document.getElementById('timer').textContent =
+          formatTime(Math.floor((Date.now() - startTime) / 1000));
       }, 1000);
     }
 
     function stopTimer() { clearInterval(timerInterval); }
 
     function formatTime(s) {
-      return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+      return `${Math.floor(s/60)}:${String(s%60).padStart(2,'0')}`;
     }
 
-    // ── Dark mode ─────────────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════
+    // THEME
+    // ══════════════════════════════════════════════════════
     function applyTheme(theme) {
       document.documentElement.setAttribute('data-theme', theme);
       const isDark = theme === 'dark';
@@ -1551,12 +1535,14 @@
       applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
     }
 
-    // ── Privacy modal ─────────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════
+    // PRIVACY MODAL
+    // ══════════════════════════════════════════════════════
     function dismissPrivacy() {
       document.getElementById('privacyModal').classList.add('hidden');
       document.body.classList.remove('modal-open');
       localStorage.setItem('privacy_acknowledged', '1');
-      document.getElementById('guessInput').focus();
+      focusTileInput();
     }
 
     function maybeShowPrivacy() {
@@ -1566,7 +1552,9 @@
       }
     }
 
-    // ── How to Play ───────────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════
+    // HOW TO PLAY
+    // ══════════════════════════════════════════════════════
     function toggleHow() {
       const btn  = document.getElementById('howToggle');
       const body = document.getElementById('howBody');
@@ -1575,187 +1563,161 @@
       body.classList.toggle('open', !open);
     }
 
-    // ── Generate secret ───────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════
+    // GAME LOGIC
+    // ══════════════════════════════════════════════════════
     function generateSecret() {
       const digits = [...'0123456789'];
-      const first  = digits.splice(Math.floor(Math.random() * 9) + 1, 1)[0];
+      const first  = digits.splice(Math.floor(Math.random()*9)+1, 1)[0];
       let pool = digits.slice(), rest = [];
       for (let i = 0; i < 3; i++) {
-        const idx = Math.floor(Math.random() * pool.length);
-        rest.push(pool.splice(idx, 1)[0]);
+        const idx = Math.floor(Math.random()*pool.length);
+        rest.push(pool.splice(idx,1)[0]);
       }
       return first + rest.join('');
     }
 
-    // ── Evaluate ──────────────────────────────────────────────────────────────
-    function evaluate(guess, sec) {
-      let bulls = 0, cows = 0;
-      for (let i = 0; i < 4; i++) {
-        if (guess[i] === sec[i]) bulls++;
-        else if (sec.includes(guess[i])) cows++;
-      }
-      return { bulls, cows };
-    }
-
-    // ── Validate ──────────────────────────────────────────────────────────────
     function validate(val) {
-      if (!/^\d{4}$/.test(val))  return 'Please enter exactly 4 digits.';
-      if (new Set(val).size < 4) return 'No repeating digits allowed.';
+      if (!/^\d{4}$/.test(val))   return 'Please enter exactly 4 digits.';
+      if (new Set(val).size < 4)  return 'No repeating digits allowed.';
       return null;
     }
 
-    // ── Submit ────────────────────────────────────────────────────────────────
     function submitGuess() {
       if (gameOver) return;
       const input = document.getElementById('guessInput');
       const val   = input.value.trim();
       const err   = validate(val);
+
       if (err) {
         showError(err);
         playError();
         haptic.error();
-        input.classList.add('shake');
-        setTimeout(() => input.classList.remove('shake'), 340);
+        document.getElementById('tilesContainer').classList.add('shake');
+        setTimeout(() => document.getElementById('tilesContainer').classList.remove('shake'), 340);
         return;
       }
+
       clearError();
-      const { bulls, cows } = evaluate(val, secret);
+
+      const { result, bulls, cows } = evaluateDetailed(val, secret);
+
+      // ── Fire animation as a pure background flourish ──
+      // No isAnimating flag, no blocking — runs completely independently
+      animateTiles(val, result);
+
+      // ── All game logic happens immediately ──
       guesses.unshift({ guess: val, bulls, cows });
       updateCounter();
       renderHistory();
-      playFeedback(bulls, cows);   // sound + haptic for this result
-      input.value = '';
-      input.focus();
+      maybeShowTooltip(bulls, cows);  // first-guess explainer — once only
+      playFeedback(bulls, cows);
+      resetTiles();
+      focusTileInput();
+
       if (bulls === 4) endGame();
     }
 
-    // ── Daily challenge ───────────────────────────────────────────────────────
-    /*
-     * Deterministic secret from the date. Same number for everyone on the same
-     * calendar day. Derived by seeding a simple LCG with today's YYYYMMDD int.
-     * No server needed — pure math, same result on every device.
-     */
-    let isDailyMode = false;
-
-    function getDailySecret() {
-      const d   = new Date();
-      const key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
-      // LCG: produces a stable pseudo-random sequence from the date seed
-      let seed = key;
-      const lcg = () => { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return Math.abs(seed); };
-
-      const digits = [...'0123456789'];
-      // Pick first digit (non-zero)
-      const firstIdx = (lcg() % 9) + 1;          // 1..9
-      const first    = digits.splice(firstIdx, 1)[0];
-      const rest     = [];
-      for (let i = 0; i < 3; i++) {
-        const idx = lcg() % digits.length;
-        rest.push(digits.splice(idx, 1)[0]);
-      }
-      return first + rest.join('');
-    }
-
-    function getDailyKey() {
-      const d = new Date();
-      return `daily_${d.getFullYear()}_${d.getMonth() + 1}_${d.getDate()}`;
-    }
-
-    function hasDailyBeenPlayed() {
-      return !!localStorage.getItem(getDailyKey());
-    }
-
-    function markDailyPlayed(guessCount, timeTaken) {
-      localStorage.setItem(getDailyKey(), JSON.stringify({ guesses: guessCount, time: timeTaken }));
-    }
-
-    function toggleDailyMode() {
-      isDailyMode = !isDailyMode;
-      const btn = document.getElementById('dailyBtn');
-      btn.style.background    = isDailyMode ? 'var(--primary-faint)' : '';
-      btn.style.borderColor   = isDailyMode ? 'var(--primary)' : '';
-      btn.style.color         = isDailyMode ? 'var(--primary-text)' : '';
-      document.getElementById('dailyBadge').style.display = isDailyMode ? '' : 'none';
-
-      if (isDailyMode && hasDailyBeenPlayed()) {
-        // Already played today — show their result
-        const saved = JSON.parse(localStorage.getItem(getDailyKey()));
-        showError(`Already played today's daily! (${saved.guesses} guesses · ${formatTime(saved.time)})`);
-        isDailyMode = false;
-        btn.style.background  = '';
-        btn.style.borderColor = '';
-        btn.style.color       = '';
-        document.getElementById('dailyBadge').style.display = 'none';
-        return;
-      }
-      newGame();
-    }
-
-    // ── Beat-your-best ────────────────────────────────────────────────────────
-    /*
-     * Reads the top score from the leaderboard and compares it to the
-     * current game. Shows the nudge only when at least one prior game exists.
-     */
+    // ── Beat-your-best ────────────────────────────────────
     function renderBeatYourBest(currentGuesses, currentTime) {
       const scores = JSON.parse(localStorage.getItem('scores') || '[]');
-      // Exclude the score we just saved (it's already in scores[0] after sort)
-      // Best prior = the best score before this game — find first entry that
-      // isn't exactly this game's stats (use playedAt as discriminator)
-      const prior = scores.find(s => s.playedAt !== startTime);
-
+      const prior  = scores.find(s => s.playedAt !== startTime);
       const pbEl   = document.getElementById('winPB');
-      const pbBest = document.getElementById('pbBest');
-      const pbThis = document.getElementById('pbThis');
-
-      if (!prior) {
-        // First game ever — no comparison to show
-        pbEl.classList.remove('visible');
-        return;
-      }
-
+      if (!prior) { pbEl.classList.remove('visible'); return; }
       pbEl.classList.add('visible');
-
-      const isNewRecord = currentGuesses < prior.guesses ||
+      const isNew = currentGuesses < prior.guesses ||
         (currentGuesses === prior.guesses && currentTime < prior.time);
-
-      pbBest.innerHTML = `${prior.guesses} guess${prior.guesses !== 1 ? 'es' : ''} · ${formatTime(prior.time)}`;
-      pbThis.innerHTML = `${currentGuesses} guess${currentGuesses !== 1 ? 'es' : ''} · ${formatTime(currentTime)}`
-        + (isNewRecord ? ' <span class="win-pb-new">🏆 New record!</span>' : '');
+      document.getElementById('pbBest').innerHTML =
+        `${prior.guesses} guess${prior.guesses!==1?'es':''} · ${formatTime(prior.time)}`;
+      document.getElementById('pbThis').innerHTML =
+        `${currentGuesses} guess${currentGuesses!==1?'es':''} · ${formatTime(currentTime)}`
+        + (isNew ? ' <span class="win-pb-new">🏆 New record!</span>' : '');
     }
 
-    // ── Share result ──────────────────────────────────────────────────────────
-    let shareText = '';   // built in endGame, used in shareResult()
+    // ── Share ─────────────────────────────────────────────
+    let shareText = '';
 
     function shareResult() {
       const btn = document.getElementById('shareBtn');
-
-      // Mobile: use native share sheet (Android, iOS)
       if (navigator.share) {
-        navigator.share({
-          title: 'Cows & Bulls',
-          text: shareText
-        }).catch(() => {
-          // User cancelled or share failed — do nothing
-        });
+        navigator.share({ title: 'Cows & Bulls', text: shareText }).catch(()=>{});
         return;
       }
-
-      // Desktop fallback: copy to clipboard
       navigator.clipboard.writeText(shareText).then(() => {
-        const original = btn.innerHTML;
+        const orig = btn.innerHTML;
         btn.textContent = '✅ Copied!';
         btn.classList.add('copied');
-        setTimeout(() => {
-          btn.innerHTML = original;
-          btn.classList.remove('copied');
-        }, 2000);
-      }).catch(() => {
-        // Clipboard API unavailable (e.g. file:// protocol) — manual fallback
-        prompt('Copy your result:', shareText);
-      });
+        setTimeout(() => { btn.innerHTML = orig; btn.classList.remove('copied'); }, 2000);
+      }).catch(() => prompt('Copy your result:', shareText));
     }
 
-    // ── End game ──────────────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════
+    // FIRST-GUESS TOOLTIP
+    // Shows once ever, after the very first guess.
+    // Explains the result in plain English using the
+    // actual bulls/cows count from that specific guess.
+    // ══════════════════════════════════════════════════════
+    function maybeShowTooltip(bulls, cows) {
+      if (localStorage.getItem('tooltip_seen')) return;
+      if (guesses.length !== 1) return; // only on first guess
+
+      const overlay = document.getElementById('fgtOverlay');
+      const body    = document.getElementById('fgtBody');
+      const box     = document.getElementById('fgtBox');
+
+      // Build contextual explanation using real numbers
+      let explanation = '';
+
+      if (bulls === 0 && cows === 0) {
+        explanation = `You got <span class="fgt-bull">0 Bulls</span> and <span class="fgt-cow">0 Cows</span> — none of your 4 digits appear in the secret number at all. Try completely different digits.`;
+      } else if (bulls > 0 && cows === 0) {
+        explanation = `You got <span class="fgt-bull">${bulls} Bull${bulls>1?'s':''}</span> — that means ${bulls} of your digits ${bulls>1?'are':'is'} in exactly the right position. <span class="fgt-cow">0 Cows</span> means no other digits are in the number.`;
+      } else if (bulls === 0 && cows > 0) {
+        explanation = `You got <span class="fgt-cow">${cows} Cow${cows>1?'s':''}</span> — that means ${cows} of your digits ${cows>1?'are':'is'} in the secret number but in the wrong position. <span class="fgt-bull">0 Bulls</span> means none are in the right spot yet.`;
+      } else {
+        explanation = `You got <span class="fgt-bull">${bulls} Bull${bulls>1?'s':''}</span> (right digit, right position) and <span class="fgt-cow">${cows} Cow${cows>1?'s':''}</span> (right digit, wrong position). Use this to narrow down the secret number!`;
+      }
+
+      body.innerHTML = explanation;
+
+      // Position the box below the first history row
+      overlay.classList.remove('hidden');
+
+      // Anchor below the history list on desktop, fixed centre on mobile
+      const historyEl = document.getElementById('historyList');
+      if (historyEl && window.innerWidth > 480) {
+        const rect = historyEl.getBoundingClientRect();
+        box.style.top      = `${rect.bottom + window.scrollY + 10}px`;
+        box.style.left     = `${rect.left + window.scrollX}px`;
+        box.style.position = 'absolute';
+      } else {
+        box.style.position  = 'fixed';
+        box.style.top       = '50%';
+        box.style.left      = '50%';
+        box.style.transform = 'translate(-50%, -50%)';
+        box.style.maxWidth  = 'calc(100vw - 32px)';
+        box.classList.add('no-arrow');
+      }
+
+      // Trigger animation now that box is in position
+      requestAnimationFrame(() => box.classList.add('visible'));
+    }
+
+    function dismissTooltip() {
+      const overlay = document.getElementById('fgtOverlay');
+      const box     = document.getElementById('fgtBox');
+      overlay.classList.add('hidden');
+      box.classList.remove('visible', 'no-arrow');
+      box.style.top = '-9999px';
+      box.style.left = '-9999px';
+      localStorage.setItem('tooltip_seen', '1');
+      focusTileInput();
+    }
+
+    // Dismiss on overlay background click
+    document.getElementById('fgtOverlay').addEventListener('click', function(e) {
+      if (e.target === this) dismissTooltip();
+    });
     function endGame() {
       gameOver = true;
       document.getElementById('guessInput').disabled = true;
@@ -1765,50 +1727,53 @@
       const timeTaken = Math.floor((Date.now() - startTime) / 1000);
       const n         = guesses.length;
 
-      // Save score (leaderboard)
       saveScore(n, timeTaken);
 
-      // Mark daily as played if in daily mode
-      if (isDailyMode) {
-        markDailyPlayed(n, timeTaken);
-        document.getElementById('winDailyBadge').style.display = '';
-        document.getElementById('winTitle').textContent = '📅 Daily solved!';
-      } else {
-        document.getElementById('winDailyBadge').style.display = 'none';
-        document.getElementById('winTitle').textContent = '🎉 You cracked it!';
-      }
-
-      // Win subtitle
+      document.getElementById('winTitle').textContent = '🎉 You cracked it!';
       document.getElementById('winSub').textContent =
-        `Solved in ${n} guess${n === 1 ? '' : 'es'} · ${formatTime(timeTaken)}`;
+        `Solved in ${n} guess${n===1?'':'es'} · ${formatTime(timeTaken)}`;
 
-      // Beat-your-best nudge
       renderBeatYourBest(n, timeTaken);
 
-      // Build share text
-      const modeTag = isDailyMode
-        ? `📅 Daily Challenge (${new Date().toLocaleDateString(undefined, { month:'short', day:'numeric' })})`
-        : '🎯 Cows & Bulls';
-      shareText = `${modeTag}\nSolved in ${n} guess${n === 1 ? '' : 'es'} · ${formatTime(timeTaken)}\nCan you beat me? 👉 Play free at cowsandbulls.game`;
+      // ── Build share text ──────────────────────────────
 
-      // Render everything
+      // Format time as "2m 23s" for readability
+      const mins    = Math.floor(timeTaken / 60);
+      const secs    = timeTaken % 60;
+      const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
+
+      const scoreVal = Math.round((1000 / (n * Math.max(timeTaken, 1))) * 100) / 100;
+
+      shareText = [
+        `🎯 Cows & Bulls`,
+        ``,
+        `Guesses:  ${n}`,
+        `Time:     ${timeStr}`,
+        `Score:    ${scoreVal} 🏆`,
+        ``,
+        `Can you beat my score? 👉 devxpd325.github.io/cows-and-bulls/`
+      ].join('\n');
+
       renderLeaderboard();
       document.getElementById('winBanner').classList.add('visible');
+
+      // 🎉 Confetti burst
+      launchConfetti();
     }
 
-    // ── UI helpers ────────────────────────────────────────────────────────────
+    // ── UI helpers ─────────────────────────────────────────
     function showError(msg)  { document.getElementById('errorBox').textContent = '⚠ ' + msg; }
     function clearError()    { document.getElementById('errorBox').textContent = ''; }
     function updateCounter() { document.getElementById('guessCounter').textContent = guesses.length; }
 
     function makeChip(n, type) {
-      const label = type === 'bull' ? `${n} Bull${n !== 1 ? 's' : ''}` : `${n} Cow${n !== 1 ? 's' : ''}`;
-      const cls   = n === 0 ? 'chip chip-zero' : (type === 'bull' ? 'chip chip-bull' : 'chip chip-cow');
+      const label = type==='bull' ? `${n} Bull${n!==1?'s':''}` : `${n} Cow${n!==1?'s':''}`;
+      const cls   = n===0 ? 'chip chip-zero' : (type==='bull' ? 'chip chip-bull' : 'chip chip-cow');
       return `<span class="${cls}">${label}</span>`;
     }
 
     function renderHistory() {
-      const list    = document.getElementById('historyList');
+      const list     = document.getElementById('historyList');
       const isMobile = window.innerWidth <= 680;
 
       if (guesses.length === 0) {
@@ -1817,61 +1782,50 @@
       }
 
       list.innerHTML = '';
-
-      // Desktop: newest first (guesses[0] at top, natural scroll up for older)
-      // Mobile:  oldest first + flex column-reverse → newest sits at bottom
-      //          nearest to the input, no scroll needed
       const ordered = isMobile ? [...guesses].reverse() : guesses;
 
       ordered.forEach(({ guess, bulls, cows }, i) => {
-        const li = document.createElement('li');
-        // Compute display index (1 = first guess ever, regardless of render order)
-        const displayIdx = isMobile ? (i + 1) : (guesses.length - i);
-        // Mark latest: last element in mobile (newest at bottom), first on desktop
-        const isLatest = isMobile
-          ? (i === ordered.length - 1 && !gameOver)
-          : (i === 0 && !gameOver);
-        li.className = 'history-item' +
-          (isLatest ? ' latest' : '') +
-          (bulls === 4 ? ' win-row' : '');
+        const li       = document.createElement('li');
+        const dispIdx  = isMobile ? (i+1) : (guesses.length-i);
+        const isLatest = isMobile ? (i===ordered.length-1 && !gameOver) : (i===0 && !gameOver);
+        li.className   = 'history-item' + (isLatest?' latest':'') + (bulls===4?' win-row':'');
         li.dataset.bulls = bulls;
         li.innerHTML = `
-          <span class="h-idx">${displayIdx}.</span>
+          <span class="h-idx">${dispIdx}.</span>
           <span class="h-num">${guess}</span>
           <span class="h-arrow">→</span>
-          <span class="h-result">${makeChip(bulls, 'bull')} ${makeChip(cows, 'cow')}</span>`;
+          <span class="h-result">${makeChip(bulls,'bull')} ${makeChip(cows,'cow')}</span>`;
         list.appendChild(li);
       });
 
-      // Scroll newest into view — on mobile this is the last child (bottom)
       requestAnimationFrame(() => {
         const target = isMobile ? list.lastElementChild : list.firstElementChild;
         if (target) target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
       });
     }
 
-    // ── New game ──────────────────────────────────────────────────────────────
+    // ── New game ───────────────────────────────────────────
     function newGame() {
-      // In daily mode use deterministic secret, otherwise random
-      secret   = isDailyMode ? getDailySecret() : generateSecret();
+      secret   = generateSecret();
       guesses  = [];
       gameOver = false;
+
       document.getElementById('guessInput').disabled = false;
       document.getElementById('submitBtn').disabled  = false;
-      document.getElementById('guessInput').value    = '';
       document.getElementById('winBanner').classList.remove('visible');
       document.getElementById('winPB').classList.remove('visible');
-      document.getElementById('winDailyBadge').style.display = 'none';
+
       clearError();
       updateCounter();
       renderHistory();
-      document.getElementById('guessInput').focus();
+      resetTiles();
+      focusTileInput();
       startTimer();
       playReset();
       haptic.reset();
     }
 
-    // ── Leaderboard ───────────────────────────────────────────────────────────
+    // ── Leaderboard ────────────────────────────────────────
     function renderLeaderboard() {
       const container = document.getElementById('leaderboard');
       const scores    = JSON.parse(localStorage.getItem('scores') || '[]');
@@ -1879,29 +1833,27 @@
       if (scores.length === 0) {
         container.innerHTML = `
           <div class="lb-empty">
-            <div class="lb-empty-icon">🎯</div>
+            <div class="lb-empty-icon">🌾</div>
             <div class="lb-empty-text">No scores yet</div>
             <div class="lb-empty-sub">Win a game to appear here</div>
           </div>`;
         return;
       }
 
-      const medals = ['🥇', '🥈', '🥉'];
+      const medals = ['🥇','🥈','🥉'];
       container.innerHTML = '';
       scores.forEach((s, i) => {
         const div = document.createElement('div');
-        div.className = 'lb-row' + (i === 0 ? ' lb-top' : '');
-        div.style.animationDelay = `${i * 0.05}s`;
+        div.className = 'lb-row' + (i===0?' lb-top':'');
+        div.style.animationDelay = `${i*0.05}s`;
 
         const medal = medals[i]
           ? `<span class="lb-medal">${medals[i]}</span>`
-          : `<span class="lb-medal lb-num">${i + 1}</span>`;
+          : `<span class="lb-medal lb-num">${i+1}</span>`;
 
         const date = s.playedAt
           ? new Date(s.playedAt).toLocaleString(undefined, {
-              month: 'short', day: 'numeric',
-              hour: '2-digit', minute: '2-digit'
-            })
+              month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })
           : 'Unknown';
 
         div.innerHTML = `
@@ -1932,21 +1884,35 @@
       renderLeaderboard();
     }
 
-    // ── Event listeners ───────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════
+    // EVENT LISTENERS
+    // ══════════════════════════════════════════════════════
+
+    // Hidden input: sync tile display as user types
+    document.getElementById('guessInput').addEventListener('input', function() {
+      this.value = this.value.replace(/\D/g,'').slice(0,4);
+      syncTiles(this.value);
+    });
+
+    // Enter key
     document.getElementById('guessInput').addEventListener('keydown', e => {
       if (e.key === 'Enter') submitGuess();
     });
 
-    document.getElementById('guessInput').addEventListener('input', function () {
-      this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    // Tap anywhere on tile container → focus hidden input
+    document.getElementById('tilesContainer').addEventListener('click', focusTileInput);
+
+    // Sync active tile highlight when input gains focus
+    document.getElementById('guessInput').addEventListener('focus', function() {
+      syncTiles(this.value);
     });
 
-    // close modal on overlay click (not on modal itself)
+    // Modal overlay click to close
     document.getElementById('privacyModal').addEventListener('click', function(e) {
       if (e.target === this) dismissPrivacy();
     });
 
-    // Re-render history on resize so mobile/desktop order stays correct
+    // Re-render history on breakpoint cross
     let _lastMobile = window.innerWidth <= 680;
     window.addEventListener('resize', () => {
       const nowMobile = window.innerWidth <= 680;
@@ -1956,21 +1922,21 @@
       }
     });
 
-    // ── Stale score migration ─────────────────────────────────────────────────
-    (function migrateScores() {
+    // ── Stale score migration ──────────────────────────────
+    (function() {
       const scores = JSON.parse(localStorage.getItem('scores') || '[]');
       if (scores.some(s => !s.playedAt)) localStorage.removeItem('scores');
     })();
 
-    // ── Init ──────────────────────────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════
+    // INIT
+    // ══════════════════════════════════════════════════════
     applyTheme(localStorage.getItem('theme') || 'light');
     syncMuteUI();
     maybeShowPrivacy();
-    // suppress sound on initial page load — no user gesture yet
-    const _muted = isMuted;
-    isMuted = true;
+    const _m = isMuted; isMuted = true; // silence the startup reset sound
     newGame();
-    isMuted = _muted;
+    isMuted = _m;
     renderLeaderboard();
   </script>
 </body>
