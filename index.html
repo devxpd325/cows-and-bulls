@@ -1058,16 +1058,21 @@
     <div class="modal">
       <div class="modal-stripe"></div>
       <div class="modal-body">
-        <div class="modal-title"><span>🔒</span><span id="modalTitle">Your Privacy is Safe</span></div>
-        <p class="modal-text">Before you play, here's exactly what this game does — and doesn't — do with your device.</p>
+        <div class="modal-title"><span>🔒</span><span id="modalTitle">A quick note on privacy</span></div>
+        <p class="modal-text">
+          Here's exactly what this game collects — and what it doesn't.
+        </p>
         <ul class="modal-facts">
-          <li><span class="fact-icon">✅</span><span>Your <strong>top 5 scores</strong> are saved locally in your browser's <code>localStorage</code> — tiny plain text, nothing else.</span></li>
-          <li><span class="fact-icon">✅</span><span><strong>No data ever leaves your device.</strong> No server, no internet request, no account.</span></li>
-          <li><span class="fact-icon">✅</span><span><strong>No cookies.</strong> No ads. No analytics. No third-party scripts of any kind.</span></li>
-          <li><span class="fact-icon">✅</span><span>Nothing runs in the background. Completely idle when you're not playing.</span></li>
-          <li><span class="fact-icon">✅</span><span>Erase your scores anytime using the <strong>Clear</strong> button in the scoreboard.</span></li>
+          <li><span class="fact-icon">✅</span><span>Your <strong>top 5 scores</strong> are saved locally on your device for the personal leaderboard.</span></li>
+          <li><span class="fact-icon">✅</span><span>When you win, your <strong>score, guess count, and time</strong> are submitted to a global leaderboard so you can compete with other players worldwide.</span></li>
+          <li><span class="fact-icon">✅</span><span>A <strong>random anonymous ID</strong> is generated for your device — no name, no email, no account. It only exists to associate your scores with you.</span></li>
+          <li><span class="fact-icon">✅</span><span><strong>No personal information</strong> is ever collected — no location, no contacts, no browsing data.</span></li>
+          <li><span class="fact-icon">✅</span><span><strong>No cookies, no ads, no tracking.</strong> The only data sent is your game result when you win.</span></li>
+          <li><span class="fact-icon">✅</span><span>You can clear your local scores anytime using the <strong>Clear local</strong> button in the scoreboard.</span></li>
         </ul>
-        <div class="modal-note"><strong>In short:</strong> This is just a game. As safe as opening a text file.</div>
+        <div class="modal-note">
+          <strong>In short:</strong> Your game results go to a global leaderboard. Nothing personal, nothing identifiable, nothing else.
+        </div>
         <div class="modal-footer">
           <button class="btn-got-it" onclick="dismissPrivacy()">Got it, let's play! 🎯</button>
         </div>
@@ -1217,7 +1222,7 @@
               </div>
             </div>
             <!-- Guess button sits beside tiles -->
-            <button class="btn btn-primary" id="submitBtn" onclick="submitGuess()">Guess</button>
+            <button class="btn btn-primary" id="submitBtn" onclick="submitGuess()" ontouchend="event.stopPropagation()">Guess</button>
           </div>
           <!-- Hidden input captures keystrokes -->
           <input type="text" id="guessInput" class="hidden-tile-input"
@@ -1593,12 +1598,14 @@
     function dismissPrivacy() {
       document.getElementById('privacyModal').classList.add('hidden');
       document.body.classList.remove('modal-open');
-      localStorage.setItem('privacy_acknowledged', '1');
+      localStorage.setItem('privacy_acknowledged', 'v2');
       focusTileInput();
     }
 
     function maybeShowPrivacy() {
-      if (!localStorage.getItem('privacy_acknowledged')) {
+      // v2 bump — anyone who accepted the old "no data leaves device" notice
+      // must see the updated notice about global leaderboard data collection
+      if (localStorage.getItem('privacy_acknowledged') !== 'v2') {
         document.getElementById('privacyModal').classList.remove('hidden');
         document.body.classList.add('modal-open');
       }
@@ -2133,8 +2140,11 @@
       if (e.key === 'Enter') submitGuess();
     });
 
-    // Tap anywhere on tile container → focus hidden input
-    document.getElementById('tilesContainer').addEventListener('click', focusTileInput);
+    // Tap on tiles area (not buttons) → focus hidden input
+    document.getElementById('tilesContainer').addEventListener('click', function(e) {
+      if (e.target.closest('button')) return; // don't steal focus from buttons
+      focusTileInput();
+    });
 
     // Sync active tile highlight when input gains focus
     document.getElementById('guessInput').addEventListener('focus', function() {
