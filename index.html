@@ -366,6 +366,64 @@
 
     .lb-row.lb-top { border-color: var(--bull-border); background: var(--bull-faint); }
 
+    /* ── "You" highlight row ── */
+    .lb-row.lb-mine {
+      border-color: rgba(45,106,79,.4);
+      background: var(--primary-faint);
+    }
+
+    .lb-you-badge {
+      font-size: 0.5625rem;
+      font-weight: 700;
+      color: var(--primary-text);
+      background: var(--primary-faint);
+      border: 1px solid rgba(45,106,79,.3);
+      border-radius: 99px;
+      padding: 1px 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    /* ── Player name display ── */
+    .lb-player-name {
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-base);
+      margin-bottom: 2px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .lb-edit-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.65rem;
+      color: var(--text-faint);
+      padding: 0 2px;
+      line-height: 1;
+      transition: color 0.15s;
+    }
+
+    .lb-edit-btn:hover { color: var(--primary); }
+
+    /* ── Inline name editor ── */
+    .lb-name-input {
+      font-family: var(--font);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-strong);
+      background: var(--surface);
+      border: 1.5px solid var(--primary);
+      border-radius: var(--radius-sm);
+      padding: 2px var(--s2);
+      width: 120px;
+      outline: none;
+    }
+
     .lb-medal { font-size: 1.125rem; line-height: 1; text-align: center; }
     .lb-medal.lb-num { font-size: 0.75rem; font-weight: 700; color: var(--text-faint); }
 
@@ -660,6 +718,51 @@
 
     .win-title { font-size: 1.1rem; font-weight: 800; color: #1b4332; letter-spacing: -0.01em; }
     .win-sub   { font-size: 0.8125rem; color: #2d6a4f; margin-top: var(--s1); font-weight: 500; }
+
+    /* Player name in win banner */
+    .win-player-name {
+      margin-top: var(--s2);
+      font-size: 0.75rem;
+      color: #2d6a4f;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+    }
+
+    .win-player-name .name-label {
+      font-weight: 700;
+      color: #1b4332;
+    }
+
+    .win-player-name .name-edit-btn {
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-size: 0.7rem;
+      color: rgba(45,106,79,.5);
+      padding: 0 2px;
+      transition: color 0.15s;
+    }
+
+    .win-player-name .name-edit-btn:hover { color: #1b4332; }
+
+    .win-name-input {
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      font-weight: 700;
+      color: #1b4332;
+      background: rgba(255,255,255,.6);
+      border: 1.5px solid #74c69d;
+      border-radius: var(--radius-sm);
+      padding: 2px var(--s2);
+      width: 140px;
+      outline: none;
+      text-align: center;
+    }
+
+    [data-theme="dark"] .win-player-name { color: #74c69d; }
+    [data-theme="dark"] .win-player-name .name-label { color: #b7e4c7; }
 
     [data-theme="dark"] .win-title { color: #b7e4c7; }
     [data-theme="dark"] .win-sub   { color: #74c69d; }
@@ -1104,7 +1207,26 @@
     </div>
   </div>
 
-  <!-- ── Header ── -->
+  <!-- ── First-win name prompt ── -->
+  <div class="modal-overlay hidden" id="nameModal">
+    <div class="modal">
+      <div class="modal-stripe"></div>
+      <div class="modal-body">
+        <div class="modal-title"><span>🏆</span><span>You're on the leaderboard!</span></div>
+        <p class="modal-text">You've been assigned a name for the global leaderboard. Feel free to keep it or change it to something you like.</p>
+        <div style="margin-bottom:var(--s4);">
+          <label style="font-size:0.75rem;font-weight:600;color:var(--text-muted);display:block;margin-bottom:var(--s2);">YOUR NAME</label>
+          <input type="text" id="nameInput" maxlength="20"
+            style="width:100%;font-family:var(--font);font-size:1rem;font-weight:700;color:var(--text-strong);background:var(--bg);border:2px solid var(--primary);border-radius:var(--radius-md);padding:var(--s3) var(--s4);outline:none;"
+            placeholder="e.g. CleverBull73" />
+          <div style="font-size:0.6875rem;color:var(--text-faint);margin-top:var(--s2);">Max 20 characters. This shows on the global leaderboard.</div>
+        </div>
+        <div class="modal-footer" style="gap:var(--s2);display:flex;justify-content:flex-end;">
+          <button class="btn-got-it" onclick="saveNameAndContinue()">Looks good! 🎯</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <header>
     <div class="header-title">
       <div class="logo-row">
@@ -1197,6 +1319,8 @@
         <div class="win-banner" id="winBanner">
           <div class="win-title" id="winTitle">🎉 You cracked it!</div>
           <div class="win-sub" id="winSub"></div>
+          <!-- Player name display with inline edit -->
+          <div class="win-player-name" id="winPlayerName"></div>
           <div class="win-personal-best" id="winPB">
             <div class="win-pb-row"><span class="win-pb-label">Your best</span><span class="win-pb-val" id="pbBest">—</span></div>
             <div class="win-pb-row"><span class="win-pb-label">This game</span><span class="win-pb-val" id="pbThis"></span></div>
@@ -1801,6 +1925,73 @@
     document.getElementById('fgtOverlay').addEventListener('click', function(e) {
       if (e.target === this) dismissTooltip();
     });
+    // ── First-win name prompt (Option C) ─────────────────
+    function maybeShowNamePrompt(onComplete) {
+      const isFirstWin = !localStorage.getItem('name_prompted');
+      if (!isFirstWin) { onComplete(); return; }
+
+      const input = document.getElementById('nameInput');
+      input.value = getOrCreatePlayerName();
+      document.getElementById('nameModal').classList.remove('hidden');
+      document.body.classList.add('modal-open');
+
+      // Store callback to run after save
+      window._namePromptCallback = onComplete;
+    }
+
+    function saveNameAndContinue() {
+      const input   = document.getElementById('nameInput');
+      const newName = input.value.trim();
+      if (newName) localStorage.setItem('player_name', newName);
+      localStorage.setItem('name_prompted', '1');
+      document.getElementById('nameModal').classList.add('hidden');
+      document.body.classList.remove('modal-open');
+      if (window._namePromptCallback) {
+        window._namePromptCallback();
+        window._namePromptCallback = null;
+      }
+    }
+
+    // ── Win banner name display (Option D) ───────────────
+    function renderWinPlayerName() {
+      const el   = document.getElementById('winPlayerName');
+      const name = getOrCreatePlayerName();
+
+      el.innerHTML = `
+        Playing as <span class="name-label">${name}</span>
+        <button class="name-edit-btn" title="Edit your name" onclick="editWinName()">✏️</button>`;
+    }
+
+    function editWinName() {
+      const el      = document.getElementById('winPlayerName');
+      const current = getOrCreatePlayerName();
+
+      const input = document.createElement('input');
+      input.type      = 'text';
+      input.className = 'win-name-input';
+      input.value     = current;
+      input.maxLength = 20;
+
+      el.innerHTML = '';
+      el.appendChild(input);
+      input.focus();
+      input.select();
+
+      const save = () => {
+        const newName = input.value.trim() || current;
+        localStorage.setItem('player_name', newName);
+        renderWinPlayerName();
+        // Refresh global leaderboard so new name shows immediately
+        if (activeTab === 'global') renderLeaderboard();
+      };
+
+      input.addEventListener('blur', save);
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter')  { e.preventDefault(); input.blur(); }
+        if (e.key === 'Escape') { input.value = current; input.blur(); }
+      });
+    }
+
     function endGame() {
       gameOver = true;
       document.getElementById('guessInput').disabled = true;
@@ -1816,15 +2007,13 @@
       document.getElementById('winSub').textContent =
         `Solved in ${n} guess${n===1?'':'es'} · ${formatTime(timeTaken)}`;
 
+      renderWinPlayerName();
       renderBeatYourBest(n, timeTaken);
 
-      // ── Build share text ──────────────────────────────
-
-      // Format time as "2m 23s" for readability
-      const mins    = Math.floor(timeTaken / 60);
-      const secs    = timeTaken % 60;
-      const timeStr = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
-
+      // Build share text
+      const mins     = Math.floor(timeTaken / 60);
+      const secs     = timeTaken % 60;
+      const timeStr  = mins > 0 ? `${mins}m ${secs}s` : `${secs}s`;
       const scoreVal = Math.round((1000 / (n * Math.max(timeTaken, 1))) * 100) / 100;
 
       shareText = [
@@ -1837,11 +2026,12 @@
         `Can you beat my score? 👉 devxpd325.github.io/cows-and-bulls/`
       ].join('\n');
 
-      renderLeaderboard();
-      document.getElementById('winBanner').classList.add('visible');
-
-      // 🎉 Confetti burst
-      launchConfetti();
+      // Show name prompt on first win, then show win banner
+      maybeShowNamePrompt(() => {
+        renderLeaderboard();
+        document.getElementById('winBanner').classList.add('visible');
+        launchConfetti();
+      });
     }
 
     // ── UI helpers ─────────────────────────────────────────
@@ -1957,7 +2147,6 @@
     function getOrCreatePlayerId() {
       let id = localStorage.getItem('player_id');
       if (!id) {
-        // Generate a random UUID v4
         id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
           const r = Math.random() * 16 | 0;
           return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
@@ -1965,6 +2154,59 @@
         localStorage.setItem('player_id', id);
       }
       return id;
+    }
+
+    // ── Player name ───────────────────────────────────────
+    const FARM_ADJ = [
+      'Happy','Grumpy','Sleepy','Muddy','Clever','Bold','Lazy','Wobbly',
+      'Hungry','Fluffy','Cheeky','Sturdy','Gentle','Frisky','Bouncy','Sneaky'
+    ];
+    const FARM_NOUN = ['Bull','Cow','Calf','Steer','Heifer','Ox','Bison','Yak'];
+
+    function generatePlayerName() {
+      const adj  = FARM_ADJ[Math.floor(Math.random() * FARM_ADJ.length)];
+      const noun = FARM_NOUN[Math.floor(Math.random() * FARM_NOUN.length)];
+      const num  = Math.floor(Math.random() * 90) + 10; // 10–99
+      return `${adj}${noun}${num}`;
+    }
+
+    function getOrCreatePlayerName() {
+      let name = localStorage.getItem('player_name');
+      if (!name) {
+        name = generatePlayerName();
+        localStorage.setItem('player_name', name);
+      }
+      return name;
+    }
+
+    // Show inline editor on the leaderboard row
+    function editPlayerName(rowEl) {
+      const nameSpan = rowEl.querySelector('.lb-player-name');
+      const current  = localStorage.getItem('player_name') || '';
+
+      const input = document.createElement('input');
+      input.type      = 'text';
+      input.className = 'lb-name-input';
+      input.value     = current;
+      input.maxLength = 20;
+
+      nameSpan.innerHTML = '';
+      nameSpan.appendChild(input);
+      input.focus();
+      input.select();
+
+      const save = () => {
+        const newName = input.value.trim() || current;
+        localStorage.setItem('player_name', newName);
+        // Refresh leaderboard so name updates everywhere
+        renderLeaderboard();
+      };
+
+      input.addEventListener('blur', save);
+      input.addEventListener('keydown', e => {
+        if (e.key === 'Enter') { e.preventDefault(); input.blur(); }
+        if (e.key === 'Escape') { input.value = current; input.blur(); }
+      });
     }
 
     // ── Tab state ─────────────────────────────────────────
@@ -1991,11 +2233,12 @@
 
       // Push to Supabase (fire and forget — don't block the UI)
       supa.post('scores', {
-        player_id: playerId,
+        player_id:   playerId,
+        player_name: getOrCreatePlayerName(),
         score,
-        guesses: guessesCount,
-        time_taken: timeTaken,
-        played_at: new Date().toISOString()
+        guesses:     guessesCount,
+        time_taken:  timeTaken,
+        played_at:   new Date().toISOString()
       });
 
       // Increment global games counter
@@ -2040,7 +2283,7 @@
 
     async function renderGlobalLeaderboard(container) {
       const scores = await supa.get('scores',
-        'select=score,guesses,time_taken,played_at&order=score.desc&limit=10'
+        'select=score,guesses,time_taken,played_at,player_id,player_name&order=score.desc&limit=10'
       );
 
       if (!scores || scores.length === 0) {
@@ -2053,25 +2296,41 @@
         return;
       }
 
-      const medals = ['🥇','🥈','🥉'];
+      const myId    = localStorage.getItem('player_id');
+      const myName  = getOrCreatePlayerName();
+      const medals  = ['🥇','🥈','🥉'];
       container.innerHTML = '';
+
       scores.forEach((s, i) => {
-        const div = document.createElement('div');
-        div.className = 'lb-row' + (i===0?' lb-top':'');
-        div.style.animationDelay = `${i*0.04}s`;
+        const isMe  = s.player_id === myId;
+        const div   = document.createElement('div');
+        div.className = 'lb-row'
+          + (i === 0 && !isMe ? ' lb-top' : '')
+          + (isMe ? ' lb-mine' : '');
+        div.style.animationDelay = `${i * 0.04}s`;
 
         const medal = medals[i]
           ? `<span class="lb-medal">${medals[i]}</span>`
-          : `<span class="lb-medal lb-num">${i+1}</span>`;
+          : `<span class="lb-medal lb-num">${i + 1}</span>`;
 
         const date = s.played_at
           ? new Date(s.played_at).toLocaleString(undefined, {
               month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })
           : '—';
 
+        // Show stored name or fallback to "Player"
+        const displayName = isMe ? myName : (s.player_name || 'Player');
+        const youBadge    = isMe ? `<span class="lb-you-badge">You</span>` : '';
+        const editBtn     = isMe
+          ? `<button class="lb-edit-btn" title="Edit your name" onclick="editPlayerName(this.closest('.lb-row'))">✏️</button>`
+          : '';
+
         div.innerHTML = `
           ${medal}
           <div class="lb-info">
+            <div class="lb-player-name">
+              ${displayName}${youBadge}${editBtn}
+            </div>
             <div class="lb-stat-row">
               <span class="lb-stat">
                 <span class="lb-stat-label">Guesses</span>
