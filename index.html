@@ -1124,7 +1124,7 @@
 
         <!-- Win banner -->
         <div class="win-banner" id="winBanner">
-          <div class="win-title" id="winTitle">🎉 Nailed it!</div>
+          <div class="win-title" id="winTitle">🎉 You cracked it!</div>
           <div class="win-sub" id="winSub"></div>
           <div class="win-personal-best" id="winPB">
             <div class="win-pb-row"><span class="win-pb-label">Your best</span><span class="win-pb-val" id="pbBest">—</span></div>
@@ -1730,7 +1730,7 @@
 
       saveScore(n, timeTaken);
 
-      document.getElementById('winTitle').textContent = '🎉 Nailed it!';
+      document.getElementById('winTitle').textContent = '🎉 You cracked it!';
       document.getElementById('winSub').textContent =
         `Solved in ${n} guess${n===1?'':'es'} · ${formatTime(timeTaken)}`;
 
