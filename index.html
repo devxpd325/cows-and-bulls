@@ -1,3 +1,14 @@
+<!--
+  ╔═══════════════════════════════════════════════════════╗
+  ║  Cows & Bulls — A 4-digit deduction game              ║
+  ║  © 2026 devxpd325. All rights reserved.               ║
+  ║  https://devxpd325.github.io/cows-and-bulls/          ║
+  ║                                                       ║
+  ║  Built entirely by the author. Unauthorised copying,  ║
+  ║  redistribution, or use in portfolios is prohibited.  ║
+  ║  Git commit history verifies authorship.              ║
+  ╚═══════════════════════════════════════════════════════╝
+-->
 <!DOCTYPE html>
 <html lang="en" data-theme="light">
 <head>
@@ -606,6 +617,8 @@
       background: var(--primary);
       color: #fff;
       box-shadow: 0 3px 10px rgba(45,106,79,.4);
+      position: relative;
+      z-index: 3; /* sit above the hidden tile input (z-index: 2) */
     }
 
     .btn-primary:hover     { background: var(--primary-dark); }
@@ -960,6 +973,25 @@
     }
 
     .fgt-dismiss button:hover { background: var(--primary); color: #fff; }
+
+    /* ── Footer credit ── */
+    .game-footer {
+      margin-top: var(--s5);
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      text-align: center;
+      letter-spacing: 0.02em;
+    }
+
+    .game-footer a {
+      color: var(--text-faint);
+      text-decoration: none;
+      border-bottom: 1px dashed var(--border-mid);
+      transition: color 0.15s;
+    }
+
+    .game-footer a:hover { color: var(--primary); }
+
     @media (max-width: 768px) {
       .lb-card { flex: 0 0 240px; width: 240px; }
     }
@@ -1058,21 +1090,13 @@
     <div class="modal">
       <div class="modal-stripe"></div>
       <div class="modal-body">
-        <div class="modal-title"><span>🔒</span><span id="modalTitle">A quick note on privacy</span></div>
-        <p class="modal-text">
-          Here's exactly what this game collects — and what it doesn't.
-        </p>
+        <div class="modal-title"><span>🔒</span><span id="modalTitle">You're in safe hands.</span></div>
+        <p class="modal-text">Before you play, here's a quick note on privacy.</p>
         <ul class="modal-facts">
-          <li><span class="fact-icon">✅</span><span>Your <strong>top 5 scores</strong> are saved locally on your device for the personal leaderboard.</span></li>
-          <li><span class="fact-icon">✅</span><span>When you win, your <strong>score, guess count, and time</strong> are submitted to a global leaderboard so you can compete with other players worldwide.</span></li>
-          <li><span class="fact-icon">✅</span><span>A <strong>random anonymous ID</strong> is generated for your device — no name, no email, no account. It only exists to associate your scores with you.</span></li>
-          <li><span class="fact-icon">✅</span><span><strong>No personal information</strong> is ever collected — no location, no contacts, no browsing data.</span></li>
-          <li><span class="fact-icon">✅</span><span><strong>No cookies, no ads, no tracking.</strong> The only data sent is your game result when you win.</span></li>
-          <li><span class="fact-icon">✅</span><span>You can clear your local scores anytime using the <strong>Clear local</strong> button in the scoreboard.</span></li>
+          <li><span class="fact-icon">🙈</span><span>We don't know who you are and we don't need to — no name, no email, no account.</span></li>
+          <li><span class="fact-icon">🚫</span><span>No ads, no tracking, nothing running in the background.</span></li>
+          <li><span class="fact-icon">🏆</span><span>Your scores are shared anonymously to power the global leaderboard — that's the only thing that ever leaves your device.</span></li>
         </ul>
-        <div class="modal-note">
-          <strong>In short:</strong> Your game results go to a global leaderboard. Nothing personal, nothing identifiable, nothing else.
-        </div>
         <div class="modal-footer">
           <button class="btn-got-it" onclick="dismissPrivacy()">Got it, let's play! 🎯</button>
         </div>
@@ -2185,5 +2209,9 @@
     renderLeaderboard();
     loadStats();
   </script>
+  <footer class="game-footer">
+    Built by <a href="https://github.com/devxpd325" target="_blank" rel="noopener">devxpd325</a> · © 2026 · <a href="https://devxpd325.github.io/cows-and-bulls/" target="_blank" rel="noopener">Cows &amp; Bulls</a>
+  </footer>
+
 </body>
 </html>
