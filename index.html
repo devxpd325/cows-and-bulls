@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cows &amp; Bulls</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐮</text></svg>" />
   <style>
     /* ═══════════════════════════════════════════════════
        DESIGN TOKENS — PLAYFUL FARM (light default)
@@ -1123,7 +1124,7 @@
 
         <!-- Win banner -->
         <div class="win-banner" id="winBanner">
-          <div class="win-title" id="winTitle">🎉 You cracked it!</div>
+          <div class="win-title" id="winTitle">🎉 Nailed it!</div>
           <div class="win-sub" id="winSub"></div>
           <div class="win-personal-best" id="winPB">
             <div class="win-pb-row"><span class="win-pb-label">Your best</span><span class="win-pb-val" id="pbBest">—</span></div>
@@ -1729,7 +1730,7 @@
 
       saveScore(n, timeTaken);
 
-      document.getElementById('winTitle').textContent = '🎉 You cracked it!';
+      document.getElementById('winTitle').textContent = '🎉 Nailed it!';
       document.getElementById('winSub').textContent =
         `Solved in ${n} guess${n===1?'':'es'} · ${formatTime(timeTaken)}`;
 
