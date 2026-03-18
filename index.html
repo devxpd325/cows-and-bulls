@@ -294,6 +294,48 @@
 
     .lb-divider { border: none; border-top: 1px solid var(--border); margin: var(--s3) var(--s4) 0; }
 
+    /* ── Leaderboard tabs ── */
+    .lb-tabs {
+      display: flex;
+      gap: 2px;
+      padding: var(--s2) var(--s4) 0;
+    }
+
+    .lb-tab {
+      flex: 1;
+      font-family: var(--font);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-faint);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: var(--s1) var(--s2);
+      cursor: pointer;
+      min-height: 36px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .lb-tab.active {
+      background: var(--primary-faint);
+      color: var(--primary-text);
+      border-color: rgba(45,106,79,.3);
+    }
+
+    .lb-tab:hover:not(.active) {
+      background: var(--border);
+      color: var(--text-base);
+    }
+
+    /* ── Stats strip ── */
+    .lb-stats-strip {
+      font-size: 0.6875rem;
+      color: var(--text-faint);
+      text-align: center;
+      padding: var(--s2) var(--s4) 0;
+      letter-spacing: 0.02em;
+    }
+
     .lb-list { padding: var(--s3) var(--s4) var(--s4); display: flex; flex-direction: column; gap: var(--s2); }
 
     .lb-row {
@@ -1200,8 +1242,17 @@
     <!-- Leaderboard card -->
     <div class="lb-card">
       <div class="lb-header">
-        <div class="lb-title">🏆 Best Scores</div>
-        <button class="lb-clear-btn" onclick="clearScores()">Clear</button>
+        <div class="lb-title">🏆 Leaderboard</div>
+        <button class="lb-clear-btn" onclick="clearLocalScores()">Clear local</button>
+      </div>
+      <!-- Tab switcher -->
+      <div class="lb-tabs">
+        <button class="lb-tab active" id="tabGlobal" onclick="switchTab('global')">🌍 Global</button>
+        <button class="lb-tab" id="tabLocal" onclick="switchTab('local')">📱 Mine</button>
+      </div>
+      <!-- Stats strip -->
+      <div class="lb-stats-strip" id="lbStatsStrip">
+        <span id="lbTotalGames">— games played</span>
       </div>
       <hr class="lb-divider" />
       <div class="lb-list" id="leaderboard"></div>
@@ -1826,16 +1877,198 @@
       haptic.reset();
     }
 
-    // ── Leaderboard ────────────────────────────────────────
-    function renderLeaderboard() {
+    // ══════════════════════════════════════════════════════
+    // SUPABASE — Global leaderboard + stats
+    // ══════════════════════════════════════════════════════
+    const SUPA_URL = 'https://gzmovczghllxrsbjsaib.supabase.co';
+    const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd6bW92Y3pnaGxseHJzYmpzYWliIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzM4Mjk2OTgsImV4cCI6MjA4OTQwNTY5OH0.qWVwatfUdzIDYXyfdrunZgTQj0yipyFGgjIhSYpbIUM';
+
+    const supa = {
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPA_KEY,
+        'Authorization': `Bearer ${SUPA_KEY}`
+      },
+
+      async get(table, params = '') {
+        try {
+          const res = await fetch(`${SUPA_URL}/rest/v1/${table}?${params}`, {
+            headers: this.headers
+          });
+          return res.ok ? await res.json() : [];
+        } catch { return []; }
+      },
+
+      async post(table, body) {
+        try {
+          const res = await fetch(`${SUPA_URL}/rest/v1/${table}`, {
+            method: 'POST',
+            headers: { ...this.headers, 'Prefer': 'return=minimal' },
+            body: JSON.stringify(body)
+          });
+          return res.ok;
+        } catch { return false; }
+      },
+
+      async rpc(fn, body) {
+        try {
+          const res = await fetch(`${SUPA_URL}/rest/v1/rpc/${fn}`, {
+            method: 'POST',
+            headers: this.headers,
+            body: JSON.stringify(body)
+          });
+          return res.ok ? await res.json() : null;
+        } catch { return null; }
+      }
+    };
+
+    // ── Anonymous player identity ─────────────────────────
+    function getOrCreatePlayerId() {
+      let id = localStorage.getItem('player_id');
+      if (!id) {
+        // Generate a random UUID v4
+        id = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          const r = Math.random() * 16 | 0;
+          return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        localStorage.setItem('player_id', id);
+      }
+      return id;
+    }
+
+    // ── Tab state ─────────────────────────────────────────
+    let activeTab = 'global';
+
+    function switchTab(tab) {
+      activeTab = tab;
+      document.getElementById('tabGlobal').classList.toggle('active', tab === 'global');
+      document.getElementById('tabLocal').classList.toggle('active', tab === 'local');
+      renderLeaderboard();
+    }
+
+    // ── Save score (local + global) ───────────────────────
+    function saveScore(guessesCount, timeTaken) {
+      const score     = Math.round((1000 / (guessesCount * Math.max(timeTaken,1))) * 100) / 100;
+      const playerId  = getOrCreatePlayerId();
+
+      // Always save locally
+      let scores = JSON.parse(localStorage.getItem('scores') || '[]');
+      scores.push({ guesses: guessesCount, time: timeTaken, score, playedAt: startTime });
+      scores.sort((a,b) => b.score - a.score);
+      scores = scores.slice(0, 5);
+      localStorage.setItem('scores', JSON.stringify(scores));
+
+      // Push to Supabase (fire and forget — don't block the UI)
+      supa.post('scores', {
+        player_id: playerId,
+        score,
+        guesses: guessesCount,
+        time_taken: timeTaken,
+        played_at: new Date().toISOString()
+      });
+
+      // Increment global games counter
+      incrementGamesCounter();
+    }
+
+    // ── Increment games counter ───────────────────────────
+    async function incrementGamesCounter() {
+      const rows = await supa.get('stats', 'select=id,total_games&limit=1');
+      if (!rows || rows.length === 0) return;
+      const current = rows[0].total_games || 0;
+      await fetch(`${SUPA_URL}/rest/v1/stats?id=eq.${rows[0].id}`, {
+        method: 'PATCH',
+        headers: { ...supa.headers, 'Prefer': 'return=minimal' },
+        body: JSON.stringify({ total_games: current + 1 })
+      });
+      loadStats();
+    }
+
+    // ── Load and display stats strip ─────────────────────
+    async function loadStats() {
+      const rows = await supa.get('stats', 'select=total_games&limit=1');
+      const el   = document.getElementById('lbTotalGames');
+      if (rows && rows.length > 0 && rows[0].total_games > 0) {
+        el.textContent = `🌍 ${rows[0].total_games.toLocaleString()} games played globally`;
+      } else {
+        el.textContent = '';
+      }
+    }
+
+    // ── Render leaderboard ────────────────────────────────
+    async function renderLeaderboard() {
       const container = document.getElementById('leaderboard');
-      const scores    = JSON.parse(localStorage.getItem('scores') || '[]');
+      container.innerHTML = `<div class="lb-empty"><div class="lb-empty-icon" style="font-size:1.2rem">⏳</div><div class="lb-empty-text">Loading...</div></div>`;
+
+      if (activeTab === 'global') {
+        await renderGlobalLeaderboard(container);
+      } else {
+        renderLocalLeaderboard(container);
+      }
+    }
+
+    async function renderGlobalLeaderboard(container) {
+      const scores = await supa.get('scores',
+        'select=score,guesses,time_taken,played_at&order=score.desc&limit=10'
+      );
+
+      if (!scores || scores.length === 0) {
+        container.innerHTML = `
+          <div class="lb-empty">
+            <div class="lb-empty-icon">🌾</div>
+            <div class="lb-empty-text">No global scores yet</div>
+            <div class="lb-empty-sub">Be the first on the board!</div>
+          </div>`;
+        return;
+      }
+
+      const medals = ['🥇','🥈','🥉'];
+      container.innerHTML = '';
+      scores.forEach((s, i) => {
+        const div = document.createElement('div');
+        div.className = 'lb-row' + (i===0?' lb-top':'');
+        div.style.animationDelay = `${i*0.04}s`;
+
+        const medal = medals[i]
+          ? `<span class="lb-medal">${medals[i]}</span>`
+          : `<span class="lb-medal lb-num">${i+1}</span>`;
+
+        const date = s.played_at
+          ? new Date(s.played_at).toLocaleString(undefined, {
+              month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })
+          : '—';
+
+        div.innerHTML = `
+          ${medal}
+          <div class="lb-info">
+            <div class="lb-stat-row">
+              <span class="lb-stat">
+                <span class="lb-stat-label">Guesses</span>
+                <span class="lb-stat-val">${s.guesses}</span>
+              </span>
+              <span class="lb-stat">
+                <span class="lb-stat-label">Duration</span>
+                <span class="lb-stat-val">${formatTime(s.time_taken)}</span>
+              </span>
+            </div>
+            <div class="lb-played-at">Played ${date}</div>
+          </div>
+          <div class="lb-score-badge">
+            <span class="lb-score-val">${s.score}</span>
+            <span class="lb-score-label">score</span>
+          </div>`;
+        container.appendChild(div);
+      });
+    }
+
+    function renderLocalLeaderboard(container) {
+      const scores = JSON.parse(localStorage.getItem('scores') || '[]');
 
       if (scores.length === 0) {
         container.innerHTML = `
           <div class="lb-empty">
             <div class="lb-empty-icon">🌾</div>
-            <div class="lb-empty-text">No scores yet</div>
+            <div class="lb-empty-text">No local scores yet</div>
             <div class="lb-empty-sub">Win a game to appear here</div>
           </div>`;
         return;
@@ -1855,7 +2088,7 @@
         const date = s.playedAt
           ? new Date(s.playedAt).toLocaleString(undefined, {
               month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' })
-          : 'Unknown';
+          : '—';
 
         div.innerHTML = `
           ${medal}
@@ -1880,9 +2113,9 @@
       });
     }
 
-    function clearScores() {
+    function clearLocalScores() {
       localStorage.removeItem('scores');
-      renderLeaderboard();
+      if (activeTab === 'local') renderLeaderboard();
     }
 
     // ══════════════════════════════════════════════════════
@@ -1935,10 +2168,12 @@
     applyTheme(localStorage.getItem('theme') || 'light');
     syncMuteUI();
     maybeShowPrivacy();
-    const _m = isMuted; isMuted = true; // silence the startup reset sound
+    const _m = isMuted; isMuted = true;
     newGame();
     isMuted = _m;
+    getOrCreatePlayerId();   // ensure UUID exists before first game
     renderLeaderboard();
+    loadStats();
   </script>
 </body>
 </html>
