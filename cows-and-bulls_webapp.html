@@ -1,0 +1,1977 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Cows &amp; Bulls</title>
+  <style>
+    /* ═══════════════════════════════════════════════════
+       DESIGN TOKENS — LIGHT MODE
+    ═══════════════════════════════════════════════════ */
+    :root {
+      --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px;
+      --s5: 24px; --s6: 32px; --s7: 48px;
+
+      --radius-sm: 6px;  --radius-md: 8px;  --radius-lg: 16px;
+
+      /*
+       * Input height: 52px desktop → 48px mobile (still above 44px tap target).
+       * Set here; overridden in media query below.
+       */
+      --input-h: 52px;
+
+      --font: 'Segoe UI', system-ui, -apple-system, sans-serif;
+
+      /* primary */
+      --primary:       #4f46e5;
+      --primary-dark:  #4338ca;
+      --primary-ring:  rgba(79,70,229,.18);
+      --primary-faint: #eef2ff;
+      --primary-text:  #3730a3;
+
+      /* bull — amber */
+      --bull-faint:  #fffbeb;
+      --bull-text:   #92400e;
+      --bull-border: #fde68a;
+
+      /* cow — teal */
+      --cow-faint:  #f0fdfa;
+      --cow-text:   #134e4a;
+      --cow-border: #99f6e4;
+
+      /* neutrals */
+      --bg:               #f3f4f6;
+      --surface:          #ffffff;
+      --border:           #e5e7eb;
+      --border-mid:       #d1d5db;
+      --text-strong:      #111827;
+      --text-base:        #374151;
+      --text-muted:       #6b7280;
+      --text-faint:       #9ca3af;
+      --text-placeholder: #d1d5db;
+      --error:            #dc2626;
+
+      --body-bg:  #eef0ff;
+      --blob-1:   rgba(167,139,250,.28);
+      --blob-2:   rgba(94,234,212,.22);
+      --blob-3:   rgba(251,191,36,.12);
+
+      --modal-overlay: rgba(0,0,0,.45);
+      --modal-bg:      #ffffff;
+    }
+
+    /* ── Dark mode ── */
+    [data-theme="dark"] {
+      --primary:       #818cf8;
+      --primary-dark:  #6366f1;
+      --primary-ring:  rgba(129,140,248,.25);
+      --primary-faint: rgba(79,70,229,.18);
+      --primary-text:  #c7d2fe;
+
+      --bull-faint:  rgba(245,158,11,.12);
+      --bull-text:   #fcd34d;
+      --bull-border: rgba(245,158,11,.35);
+
+      --cow-faint:  rgba(13,148,136,.12);
+      --cow-text:   #5eead4;
+      --cow-border: rgba(13,148,136,.35);
+
+      --bg:               #1a1b2e;
+      --surface:          #252640;
+      --border:           #363756;
+      --border-mid:       #4a4b6a;
+      --text-strong:      #f1f1ff;
+      --text-base:        #c4c5e0;
+      --text-muted:       #8b8ca8;
+      --text-faint:       #6b6c88;
+      --text-placeholder: #4a4b6a;
+      --error:            #f87171;
+
+      --body-bg:  #0f0f1a;
+      --blob-1:   rgba(129,140,248,.15);
+      --blob-2:   rgba(45,212,191,.10);
+      --blob-3:   rgba(251,191,36,.06);
+
+      --modal-overlay: rgba(0,0,0,.7);
+      --modal-bg:      #252640;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       RESET & BASE
+    ═══════════════════════════════════════════════════ */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      /* kill blue flash on tap (mobile) */
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html {
+      /* smooth theme colour transition */
+      transition: background-color 0.3s;
+    }
+
+    /* prevent layout shift when modal opens */
+    body.modal-open { overflow: hidden; }
+
+    body {
+      min-height: 100vh;
+      /* flex-start: content anchors top when history grows tall on phones */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: var(--s6) var(--s4) var(--s7);
+      font-family: var(--font);
+      font-size: 14px;
+      color: var(--text-base);
+      line-height: 1.5;
+      background-color: var(--body-bg);
+      background-image:
+        radial-gradient(ellipse at 15% 20%, var(--blob-1) 0%, transparent 55%),
+        radial-gradient(ellipse at 85% 75%, var(--blob-2) 0%, transparent 55%),
+        radial-gradient(ellipse at 50% 50%, var(--blob-3) 0%, transparent 70%);
+      /* background doesn't re-transition on every render */
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    /* ── Keyboard focus rings (accessibility) ── */
+    :focus-visible {
+      outline: 2px solid var(--primary);
+      outline-offset: 2px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       HEADER
+    ═══════════════════════════════════════════════════ */
+    .logo {
+      font-size: clamp(1.5rem, 5vw, 2rem);
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 40%, #0d9488 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tagline {
+      margin-top: var(--s2);
+      font-size: clamp(0.7rem, 2vw, 0.8125rem);
+      color: var(--text-muted);
+      letter-spacing: 0.03em;
+    }
+
+    /* ── Header grid — logo centred, controls stacked on right ── */
+    header {
+      width: 100%;
+      max-width: 800px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: start;
+      margin-bottom: var(--s5);
+    }
+
+    /* control buttons stack vertically on the right */
+    .header-controls {
+      grid-column: 2;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+      align-items: flex-end;
+    }
+
+    .header-title {
+      grid-column: 1;
+      text-align: center;
+    }
+
+    /* ── Theme toggle ── */
+    .theme-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: var(--s1) var(--s3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.75rem;
+      font-weight: 500;
+      min-height: 44px;
+      min-width: 44px;
+      justify-content: center;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+
+    .theme-toggle:hover { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
+
+    .toggle-icon { font-size: 1rem; line-height: 1; }
+
+    /* ── Mute toggle — same pill style as theme toggle ── */
+    .mute-toggle {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 99px;
+      padding: var(--s1) var(--s3);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      color: var(--text-muted);
+      font-family: var(--font);
+      font-size: 0.75rem;
+      font-weight: 500;
+      min-height: 44px;
+      min-width: 44px;
+      justify-content: center;
+      white-space: nowrap;
+      transition: background 0.2s, border-color 0.2s, box-shadow 0.2s;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+
+    .mute-toggle:hover { border-color: var(--primary); box-shadow: 0 0 0 3px var(--primary-ring); }
+    .mute-toggle.muted { color: var(--text-placeholder); }
+
+    /* ═══════════════════════════════════════════════════
+       TWO-COLUMN LAYOUT
+    ═══════════════════════════════════════════════════ */
+    .layout {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      gap: var(--s4);
+      width: 100%;
+      max-width: 800px;
+    }
+
+    /* ═══════════════════════════════════════════════════
+       CARDS
+    ═══════════════════════════════════════════════════ */
+    .card, .lb-card {
+      background: var(--surface);
+      border-radius: var(--radius-lg);
+      border: 1px solid var(--border);
+      box-shadow:
+        0 1px 2px rgba(0,0,0,.04),
+        0 6px 24px rgba(79,70,229,.08),
+        0 16px 48px rgba(0,0,0,.06);
+      overflow: hidden;
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .card {
+      flex: 1 1 0;
+      min-width: 0;
+    }
+
+    .card::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed, #0d9488, #f59e0b);
+    }
+
+    .lb-card {
+      flex: 0 0 260px;
+      width: 260px;
+    }
+
+    .lb-card::before {
+      content: '';
+      display: block;
+      height: 4px;
+      background: linear-gradient(90deg, #7c3aed, #4f46e5);
+    }
+
+    /* ═══════════════════════════════════════════════════
+       LEADERBOARD INTERNALS
+    ═══════════════════════════════════════════════════ */
+    .lb-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--s4) var(--s4) 0;
+    }
+
+    .lb-title {
+      font-size: 0.875rem;
+      font-weight: 700;
+      color: var(--text-strong);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+    }
+
+    .lb-clear-btn {
+      font-family: var(--font);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-faint);
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: var(--s1) var(--s2);
+      /* 44px touch target via min-height */
+      min-height: 44px;
+      min-width: 44px;
+      border-radius: var(--radius-sm);
+      transition: color 0.15s, background 0.15s;
+    }
+
+    .lb-clear-btn:hover { color: var(--error); background: rgba(220,38,38,.08); }
+
+    .lb-divider { border: none; border-top: 1px solid var(--border); margin: var(--s3) var(--s4) 0; }
+
+    .lb-list {
+      padding: var(--s3) var(--s4) var(--s4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+    }
+
+    .lb-row {
+      display: grid;
+      grid-template-columns: 28px 1fr auto;
+      align-items: center;
+      gap: var(--s2);
+      padding: var(--s3);
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      animation: slideIn 0.18s ease both;
+      transition: box-shadow 0.15s, background 0.3s;
+    }
+
+    .lb-row:hover { box-shadow: 0 2px 8px rgba(0,0,0,.1); }
+
+    .lb-row.lb-top { border-color: var(--bull-border); background: var(--bull-faint); }
+
+    .lb-medal { font-size: 1.125rem; line-height: 1; text-align: center; }
+    .lb-medal.lb-num { font-size: 0.75rem; font-weight: 700; color: var(--text-faint); }
+
+    .lb-info { min-width: 0; }
+    .lb-stat-row { display: flex; gap: var(--s3); margin-bottom: 3px; }
+    .lb-stat { display: flex; flex-direction: column; }
+
+    .lb-stat-label {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-faint);
+    }
+
+    .lb-stat-val { font-size: 0.8125rem; font-weight: 700; color: var(--text-strong); }
+    .lb-played-at { font-size: 0.625rem; color: var(--text-placeholder); margin-top: 2px; }
+
+    .lb-score-badge { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
+    .lb-score-val { font-size: 0.9375rem; font-weight: 800; color: var(--primary); line-height: 1; }
+
+    .lb-score-label {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 2px;
+    }
+
+    .lb-empty { padding: var(--s6) var(--s4); text-align: center; }
+    .lb-empty-icon { font-size: 2rem; margin-bottom: var(--s2); }
+    .lb-empty-text { font-size: 0.8125rem; font-weight: 600; color: var(--text-muted); }
+    .lb-empty-sub  { font-size: 0.75rem; color: var(--text-placeholder); margin-top: var(--s1); }
+
+    /* ═══════════════════════════════════════════════════
+       HOW TO PLAY
+    ═══════════════════════════════════════════════════ */
+    .how-section {
+      border-bottom: 1px solid var(--border);
+      background: linear-gradient(135deg, rgba(238,242,255,.6) 0%, rgba(240,253,250,.6) 100%);
+      transition: background 0.3s;
+    }
+
+    [data-theme="dark"] .how-section {
+      background: linear-gradient(135deg, rgba(79,70,229,.08) 0%, rgba(13,148,136,.06) 100%);
+    }
+
+    .how-toggle {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      /* min 44px touch target */
+      min-height: 44px;
+      padding: var(--s3) var(--s5);
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      transition: background 0.15s;
+      user-select: none;
+    }
+
+    .how-toggle:hover { background: rgba(0,0,0,.03); }
+    .how-toggle .toggle-label { display: flex; align-items: center; gap: var(--s2); }
+
+    .how-arrow {
+      font-size: 0.6875rem;
+      color: var(--text-placeholder);
+      transition: transform 0.22s ease;
+    }
+
+    .how-toggle[aria-expanded="true"] .how-arrow { transform: rotate(180deg); }
+
+    .how-body {
+      display: none;
+      padding: 0 var(--s5) var(--s5);
+      font-size: 0.8125rem;
+      line-height: 1.65;
+      color: var(--text-muted);
+    }
+
+    .how-body.open { display: block; animation: fadeSlide 0.18s ease; }
+    .how-body p { margin-bottom: var(--s3); }
+    .how-body p:last-child { margin-bottom: 0; }
+
+    .how-body .pill {
+      display: inline-block;
+      border-radius: var(--radius-sm);
+      padding: 1px var(--s2);
+      font-size: 0.75rem;
+      font-weight: 600;
+      margin-right: var(--s1);
+    }
+
+    .pill-bull { background: var(--bull-faint); color: var(--bull-text); border: 1px solid var(--bull-border); }
+    .pill-cow  { background: var(--cow-faint);  color: var(--cow-text);  border: 1px solid var(--cow-border); }
+
+    .how-example {
+      margin-top: var(--s3);
+      padding: var(--s3) var(--s4);
+      background: var(--bg);
+      border-radius: var(--radius-md);
+      font-size: 0.75rem;
+      border-left: 3px solid var(--border-mid);
+      color: var(--text-base);
+    }
+
+    .how-example strong { color: var(--text-strong); }
+
+    /* ═══════════════════════════════════════════════════
+       GAME BODY
+    ═══════════════════════════════════════════════════ */
+    .game-body { padding: var(--s5); }
+
+    /* ── Meta row ── */
+    .meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--s4);
+      gap: var(--s2);
+    }
+
+    .meta-badges { display: flex; gap: var(--s3); align-items: center; flex-wrap: wrap; }
+
+    .guess-badge {
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      white-space: nowrap;
+    }
+
+    .guess-badge .count {
+      background: var(--primary-faint);
+      color: var(--primary-text);
+      font-size: 0.875rem;
+      font-weight: 700;
+      padding: var(--s1) var(--s3);
+      border-radius: 99px;
+      border: 1px solid rgba(99,102,241,.25);
+    }
+
+    /* ── Input row ── */
+    .input-row {
+      display: flex;
+      gap: var(--s2);
+      margin-bottom: var(--s2);
+    }
+
+    .input-row input { flex: 1; min-width: 0; }
+
+    .guess-input {
+      flex: 1;
+      height: var(--input-h);
+      background: var(--primary-faint);
+      border: 2px solid rgba(99,102,241,.3);
+      border-radius: var(--radius-md);
+      font-family: var(--font);
+      /*
+       * CRITICAL: font-size must be ≥ 16px on mobile inputs.
+       * Below 16px, iOS Safari auto-zooms the page on focus.
+       * We use 16px as the minimum; clamp scales up on larger screens.
+       */
+      font-size: clamp(1rem, 4vw, 1.5rem);
+      font-weight: 700;
+      letter-spacing: 0.3em;
+      text-align: center;
+      overflow: hidden;
+      padding-left: calc(var(--s3) + 0.3em);
+      padding-right: var(--s3);
+      color: var(--primary-text);
+      outline: none;
+      transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+      caret-color: var(--primary);
+      /* prevent iOS rounding input corners */
+      -webkit-appearance: none;
+      appearance: none;
+      border-radius: var(--radius-md);
+    }
+
+    .guess-input::placeholder { color: var(--text-placeholder); letter-spacing: 0.3em; font-weight: 400; }
+
+    .guess-input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px var(--primary-ring);
+      background: var(--surface);
+    }
+
+    .guess-input:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* ── Buttons ── */
+    .btn {
+      height: var(--input-h);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font);
+      font-weight: 600;
+      font-size: 0.875rem;
+      letter-spacing: 0.01em;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      padding: 0 var(--s5);
+      white-space: nowrap;
+      /* ensure touch targets are at least 44px tall */
+      min-height: 44px;
+      transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+      touch-action: manipulation;  /* remove 300ms delay on mobile */
+    }
+
+    .btn:active { transform: scale(0.97); }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(79,70,229,.35);
+    }
+
+    .btn-primary:hover     { background: var(--primary-dark); }
+    .btn-primary:disabled  { opacity: 0.4; cursor: not-allowed; box-shadow: none; }
+
+    .btn-secondary {
+      height: auto;
+      padding: var(--s2) var(--s4);
+      min-height: 44px; /* touch target */
+      background: var(--bg);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+      font-size: 0.8125rem;
+    }
+
+    .btn-secondary:hover { background: var(--border); color: var(--text-base); }
+
+    /* ── Error ── */
+    .error-box {
+      min-height: 20px;
+      font-size: 0.75rem;
+      color: var(--error);
+      font-weight: 500;
+      margin-bottom: var(--s2);
+      padding: 0 var(--s1);
+    }
+
+    /* ── Win banner ── */
+    .win-banner {
+      display: none;
+      text-align: center;
+      padding: var(--s4) var(--s5);
+      margin-bottom: var(--s4);
+      background: linear-gradient(135deg, #dcfce7, #d1fae5);
+      border-radius: var(--radius-md);
+      border: 1px solid #86efac;
+    }
+
+    [data-theme="dark"] .win-banner {
+      background: linear-gradient(135deg, rgba(34,197,94,.15), rgba(16,185,129,.12));
+      border-color: rgba(134,239,172,.3);
+    }
+
+    .win-banner.visible { display: block; animation: popIn 0.3s cubic-bezier(.34,1.56,.64,1) both; }
+    .win-title { font-size: 1.0625rem; font-weight: 700; color: #166534; letter-spacing: -0.01em; }
+    .win-sub   { font-size: 0.8125rem; color: #15803d; margin-top: var(--s1); font-weight: 500; }
+
+    [data-theme="dark"] .win-title { color: #86efac; }
+    [data-theme="dark"] .win-sub   { color: #6ee7b7; }
+
+    /* Daily challenge badge inside win banner */
+    .win-daily-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s1);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: #166534;
+      background: rgba(34,197,94,.15);
+      border: 1px solid rgba(34,197,94,.3);
+      border-radius: 99px;
+      padding: 2px var(--s3);
+      margin-top: var(--s2);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    [data-theme="dark"] .win-daily-badge { color: #86efac; }
+
+    /* Beat-your-best nudge */
+    .win-personal-best {
+      display: none;
+      margin-top: var(--s3);
+      padding: var(--s3) var(--s4);
+      background: rgba(255,255,255,.5);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      color: #166534;
+      line-height: 1.6;
+      text-align: left;
+    }
+
+    [data-theme="dark"] .win-personal-best {
+      background: rgba(255,255,255,.05);
+      color: #6ee7b7;
+    }
+
+    .win-personal-best.visible { display: block; }
+
+    .win-pb-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: var(--s3);
+    }
+
+    .win-pb-label { color: #15803d; font-weight: 500; }
+    [data-theme="dark"] .win-pb-label { color: #5eead4; }
+
+    .win-pb-val { font-weight: 700; }
+    .win-pb-new {                              /* highlight when a new record is set */
+      color: #d97706;
+      font-size: 0.625rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      background: #fef3c7;
+      border-radius: 99px;
+      padding: 1px 6px;
+    }
+
+    [data-theme="dark"] .win-pb-new { background: rgba(245,158,11,.2); color: #fcd34d; }
+
+    /* Share + Try Again action row */
+    .win-actions {
+      display: flex;
+      gap: var(--s2);
+      margin-top: var(--s3);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-share {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s2);
+      background: #166534;
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: var(--s2) var(--s4);
+      min-height: 40px;
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s, box-shadow 0.15s;
+      box-shadow: 0 2px 8px rgba(22,101,52,.25);
+      touch-action: manipulation;
+    }
+
+    .btn-share:hover  { background: #14532d; box-shadow: 0 4px 16px rgba(22,101,52,.35); }
+    .btn-share:active { transform: scale(0.97); }
+
+    [data-theme="dark"] .btn-share { background: #16a34a; }
+    [data-theme="dark"] .btn-share:hover { background: #15803d; }
+
+    .btn-share.copied {
+      background: #0d9488;
+      box-shadow: 0 2px 8px rgba(13,148,136,.3);
+    }
+
+    .btn-try-again {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s2);
+      background: transparent;
+      color: #166534;
+      border: 1px solid #86efac;
+      border-radius: var(--radius-md);
+      padding: var(--s2) var(--s4);
+      min-height: 40px;
+      font-family: var(--font);
+      font-size: 0.8125rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, transform 0.1s;
+      touch-action: manipulation;
+    }
+
+    .btn-try-again:hover  { background: rgba(34,197,94,.1); }
+    .btn-try-again:active { transform: scale(0.97); }
+
+    [data-theme="dark"] .btn-try-again { color: #86efac; border-color: rgba(134,239,172,.4); }
+
+    /* Daily mode indicator in meta row */
+    .daily-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--s1);
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--primary-text);
+      background: var(--primary-faint);
+      border: 1px solid rgba(99,102,241,.25);
+      border-radius: 99px;
+      padding: 2px var(--s3);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    /* ── Divider ── */
+    .divider { border: none; border-top: 1px solid var(--border); margin: var(--s4) 0; }
+
+    /* ── History ── */
+    .history-label {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--text-faint);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: var(--s2);
+    }
+
+    .history-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+      /*
+       * Fixed max-height with scroll keeps the card from growing
+       * infinitely on mobile; user scrolls within the list, not the page.
+       */
+      max-height: 300px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding-right: var(--s1);
+      /* smooth momentum scrolling on iOS */
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: contain;
+    }
+
+    .history-list::-webkit-scrollbar       { width: 3px; }
+    .history-list::-webkit-scrollbar-track { background: transparent; }
+    .history-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      gap: var(--s3);
+      padding: var(--s3) var(--s4);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--border-mid);
+      border-radius: var(--radius-md);
+      animation: slideIn 0.18s ease both;
+      transition: box-shadow 0.15s, background 0.3s;
+    }
+
+    /* heat-map left border by bull count */
+    .history-item[data-bulls="0"] { border-left-color: var(--border-mid); }
+    .history-item[data-bulls="1"] { border-left-color: #6ee7b7; }
+    .history-item[data-bulls="2"] { border-left-color: #fcd34d; }
+    .history-item[data-bulls="3"] { border-left-color: #fb923c; }
+    .history-item[data-bulls="4"] { border-left-color: #22c55e; background: rgba(34,197,94,.06); }
+
+    .history-item.latest  { border-color: rgba(99,102,241,.4); border-left-color: var(--primary); background: var(--primary-faint); }
+    .history-item.win-row { border-color: rgba(134,239,172,.5); border-left-color: #22c55e; background: rgba(34,197,94,.06); }
+
+    .h-idx   { font-size: 0.6875rem; font-weight: 600; color: var(--text-placeholder); min-width: 20px; flex-shrink: 0; }
+    .h-num   { font-family: var(--font); font-size: 1rem; font-weight: 700; color: var(--text-strong); letter-spacing: 0.15em; flex: 1; min-width: 0; }
+    .h-arrow { color: var(--border-mid); font-size: 0.75rem; flex-shrink: 0; }
+
+    .h-result {
+      display: flex;
+      gap: var(--s2);
+      flex-shrink: 0;
+      /* wrap chips if card is very narrow */
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .chip {
+      display: inline-flex;
+      align-items: center;
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: var(--s1) var(--s3);
+      border-radius: 99px;
+      white-space: nowrap;
+    }
+
+    .chip-bull { background: var(--bull-faint); color: var(--bull-text); border: 1px solid var(--bull-border); }
+    .chip-cow  { background: var(--cow-faint);  color: var(--cow-text);  border: 1px solid var(--cow-border); }
+    .chip-zero { background: var(--bg); color: var(--text-faint); border: 1px solid var(--border); }
+
+    .empty-history { font-size: 0.8125rem; color: var(--text-placeholder); text-align: center; padding: var(--s5) 0; }
+
+    /* ═══════════════════════════════════════════════════
+       PRIVACY MODAL
+    ═══════════════════════════════════════════════════ */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: var(--modal-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: var(--s4);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      animation: fadeIn 0.2s ease;
+      /* allow scrolling modal itself on very small screens */
+      overflow-y: auto;
+    }
+
+    .modal-overlay.hidden { display: none; }
+
+    .modal {
+      background: var(--modal-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      width: 100%;
+      max-width: 420px;
+      /* cap height so modal doesn't overflow on landscape phones */
+      max-height: calc(100vh - var(--s7));
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+      box-shadow: 0 24px 64px rgba(0,0,0,.2);
+      animation: popIn 0.25s cubic-bezier(.34,1.56,.64,1);
+    }
+
+    .modal-stripe {
+      height: 4px;
+      background: linear-gradient(90deg, #4f46e5, #7c3aed, #0d9488);
+      position: sticky;
+      top: 0;
+    }
+
+    .modal-body { padding: var(--s5); }
+
+    .modal-title {
+      font-size: 1.0625rem;
+      font-weight: 800;
+      color: var(--text-strong);
+      margin-bottom: var(--s3);
+      display: flex;
+      align-items: center;
+      gap: var(--s2);
+    }
+
+    .modal-text { font-size: 0.8125rem; color: var(--text-muted); line-height: 1.65; margin-bottom: var(--s4); }
+
+    .modal-facts {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: var(--s2);
+      margin-bottom: var(--s4);
+    }
+
+    .modal-facts li {
+      display: flex;
+      align-items: flex-start;
+      gap: var(--s2);
+      font-size: 0.8125rem;
+      color: var(--text-base);
+      line-height: 1.5;
+    }
+
+    .fact-icon { font-size: 0.9rem; flex-shrink: 0; margin-top: 1px; }
+
+    .modal-note {
+      font-size: 0.75rem;
+      color: var(--text-faint);
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: var(--s3) var(--s4);
+      margin-bottom: var(--s4);
+      line-height: 1.55;
+    }
+
+    .modal-note strong { color: var(--text-muted); }
+
+    .modal-footer { display: flex; justify-content: flex-end; }
+
+    .btn-got-it {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: var(--radius-md);
+      padding: var(--s3) var(--s5);
+      min-height: 44px; /* touch target */
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      touch-action: manipulation;
+      transition: background 0.15s, transform 0.1s;
+    }
+
+    .btn-got-it:hover  { background: var(--primary-dark); }
+    .btn-got-it:active { transform: scale(0.97); }
+
+    /* ═══════════════════════════════════════════════════
+       RESPONSIVE BREAKPOINTS
+    ═══════════════════════════════════════════════════ */
+
+    /*
+     * ── DESKTOP / LARGE TABLET LANDSCAPE (≥ 769px) ──
+     * Side-by-side layout, full padding, larger font sizes.
+     * This is already the default above.
+     */
+
+    /*
+     * ── TABLET PORTRAIT & SMALL LAPTOP (481px – 768px) ──
+     * Still single-column, but more space than mobile.
+     */
+    @media (max-width: 768px) {
+      .lb-card { flex: 0 0 240px; width: 240px; }
+    }
+
+    /*
+     * ── STACK COLUMNS (≤ 680px) ──
+     * Leaderboard moves below the game card.
+     * Toggle label hidden to save horizontal space.
+     */
+    @media (max-width: 680px) {
+      .layout {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .card, .lb-card {
+        width: 100%;
+        flex: none;
+      }
+
+      .toggle-label { display: none; }
+
+      /* tighten game-body padding */
+      .game-body { padding: var(--s4); }
+
+      /* tighten how-toggle padding */
+      .how-toggle { padding: var(--s3) var(--s4); }
+      .how-body   { padding: 0 var(--s4) var(--s4); }
+    }
+
+    /*
+     * ── MOBILE (≤ 480px) ──
+     * Compact everything. Larger tap targets already set via min-height.
+     */
+    @media (max-width: 480px) {
+      :root { --input-h: 48px; }
+
+      body { padding: var(--s4) var(--s3) var(--s6); }
+
+      header { margin-bottom: var(--s4); }
+
+      /* full-width modal, hug edges */
+      .modal { max-width: 100%; border-radius: var(--radius-md); }
+
+      /* narrow chip gap */
+      .h-result { gap: var(--s1); }
+
+      /* shrink chip font a touch */
+      .chip { font-size: 0.6875rem; padding: 2px var(--s2); }
+
+      /* history list slightly shorter so win banner stays visible */
+      .history-list { max-height: 240px; }
+
+      /* meta badges stack if very narrow */
+      .meta-badges { gap: var(--s2); }
+      .guess-badge { font-size: 0.6875rem; }
+
+      /* lb row tighter */
+      .lb-row { padding: var(--s2); gap: var(--s1); }
+      .lb-stat-val { font-size: 0.75rem; }
+      .lb-score-val { font-size: 0.875rem; }
+    }
+
+    /*
+     * ── VERY SMALL (≤ 360px) ──
+     * Minimum viable layout for 360×640 devices (e.g. older Android).
+     */
+    @media (max-width: 360px) {
+      .logo { font-size: 1.4rem; }
+
+      /* hide the arrow label on history rows to save space */
+      .h-arrow { display: none; }
+
+      /* hide index number to gain more width for guess + chips */
+      .h-idx { display: none; }
+
+      .chip { font-size: 0.625rem; padding: 2px 6px; }
+    }
+
+    /*
+     * ── LANDSCAPE PHONES (short viewport, wide) ──
+     * Reduce vertical spacing so content fits without scrolling.
+     */
+    @media (max-height: 600px) and (orientation: landscape) {
+      body { padding: var(--s3) var(--s4); }
+      header { margin-bottom: var(--s3); }
+      .game-body { padding: var(--s3) var(--s4); }
+      .history-list { max-height: 160px; }
+      .win-banner { padding: var(--s3) var(--s4); margin-bottom: var(--s3); }
+      .modal { max-height: calc(100vh - var(--s5)); }
+    }
+
+    /*
+     * ── LARGE DESKTOP (≥ 1280px) ──
+     * Slightly increase font sizes for comfortable reading distance.
+     */
+    @media (min-width: 1280px) {
+      body { font-size: 15px; }
+      .layout { max-width: 860px; }
+      header { max-width: 860px; }
+    }
+
+    /* ── SVG calendar icon (no number) ── */
+    .icon-calendar {
+      display: inline-block;
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      background-color: currentColor;
+      -webkit-mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+      mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2' ry='2'%3E%3C/rect%3E%3Cline x1='16' y1='2' x2='16' y2='6'%3E%3C/line%3E%3Cline x1='8' y1='2' x2='8' y2='6'%3E%3C/line%3E%3Cline x1='3' y1='10' x2='21' y2='10'%3E%3C/line%3E%3C/svg%3E");
+      -webkit-mask-size: contain;
+      mask-size: contain;
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+      mask-position: center;
+      vertical-align: middle;
+    }
+
+    /* ── Mobile game-body layout: history above input ── */
+    @media (max-width: 680px) {
+      .game-body {
+        display: flex;
+        flex-direction: column;
+      }
+      /* Reorder sections: win banner → meta → history → divider → input → error */
+      .win-banner     { order: 1; }
+      .meta-row       { order: 2; }
+      .history-label  { order: 3; }
+      .history-list   { order: 4; max-height: 220px; flex-direction: column-reverse; }
+      .divider        { order: 5; }
+      .input-row      { order: 6; }
+      .error-box      { order: 7; margin-bottom: 0; }
+      /* Scroll newest guess into view — handled via JS */
+    }
+    @keyframes fadeSlide { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: none; } }
+    @keyframes slideIn   { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+    @keyframes popIn     { from { opacity: 0; transform: scale(.9); } to { opacity: 1; transform: none; } }
+    @keyframes shake {
+      0%,100% { transform: none; }
+      20%     { transform: translateX(-5px); }
+      40%     { transform: translateX(5px); }
+      60%     { transform: translateX(-3px); }
+      80%     { transform: translateX(3px); }
+    }
+
+    .shake { animation: shake 0.3s ease; }
+
+    /* ── Reduced motion (accessibility) ── */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Privacy Modal ── -->
+  <div class="modal-overlay hidden" id="privacyModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal">
+      <div class="modal-stripe"></div>
+      <div class="modal-body">
+        <div class="modal-title">
+          <span>🔒</span>
+          <span id="modalTitle">Your Privacy is Safe</span>
+        </div>
+        <p class="modal-text">
+          Before you play, here's exactly what this game does — and doesn't — do with your device.
+        </p>
+        <ul class="modal-facts">
+          <li><span class="fact-icon">✅</span><span>Your <strong>top 5 scores</strong> are saved locally in your browser's <code>localStorage</code> — tiny plain text, nothing else.</span></li>
+          <li><span class="fact-icon">✅</span><span><strong>No data ever leaves your device.</strong> There's no server, no internet request, no account.</span></li>
+          <li><span class="fact-icon">✅</span><span><strong>No cookies.</strong> No ads. No analytics. No third-party scripts of any kind.</span></li>
+          <li><span class="fact-icon">✅</span><span>Nothing runs in the background. The game is completely idle when you're not playing.</span></li>
+          <li><span class="fact-icon">✅</span><span>You can erase your scores anytime using the <strong>Clear</strong> button in the scoreboard.</span></li>
+        </ul>
+        <div class="modal-note">
+          <strong>In short:</strong> This is just a game. It's as safe as opening a text file.
+          Your device, your data, your control — always.
+        </div>
+        <div class="modal-footer">
+          <button class="btn-got-it" onclick="dismissPrivacy()">Got it, let's play! 🎯</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="header-title">
+      <div class="logo">🐮 Cows &amp; Bulls 🐂</div>
+      <div class="tagline">A 4-digit deduction game</div>
+    </div>
+    <div class="header-controls">
+      <button class="theme-toggle" id="themeToggle" onclick="toggleTheme()" aria-label="Switch to dark mode">
+        <span class="toggle-icon" id="themeIcon">🌙</span>
+        <span class="toggle-label" id="themeLabel">Dark mode</span>
+      </button>
+      <button class="mute-toggle" id="muteToggle" onclick="toggleMute()" aria-label="Mute sounds">
+        <span class="toggle-icon" id="muteIcon">🔊</span>
+        <span class="toggle-label" id="muteLabel">Sound on</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ── Two-column layout ── -->
+  <div class="layout">
+
+    <!-- Game card -->
+    <div class="card">
+
+      <!-- How to Play -->
+      <div class="how-section">
+        <button class="how-toggle" id="howToggle" aria-expanded="false" onclick="toggleHow()">
+          <span class="toggle-label"><span>💡</span> How to Play</span>
+          <span class="how-arrow" aria-hidden="true">▼</span>
+        </button>
+        <div class="how-body" id="howBody">
+          <p>Guess the secret <strong>4-digit number</strong>. All digits are unique (no repeats).</p>
+          <p>
+            <span class="pill pill-bull">Bull</span> = correct digit in the <strong>correct position</strong><br/>
+            <span class="pill pill-cow">Cow</span> = correct digit in the <strong>wrong position</strong>
+          </p>
+          <div class="how-example">
+            <strong>Example:</strong> Secret is <strong>1234</strong>, you guess <strong>1243</strong><br/>
+            → <span class="pill pill-bull">2 Bulls</span> (1 &amp; 2 are in the right spot)
+            &nbsp;<span class="pill pill-cow">2 Cows</span> (3 &amp; 4 are right digits, wrong spots)
+          </div>
+          <p style="margin-top:12px;">Find the number in as few guesses as possible. Good luck! 🎯</p>
+        </div>
+      </div>
+
+      <!-- Game body -->
+      <div class="game-body">
+
+        <!-- Win banner -->
+        <div class="win-banner" id="winBanner">
+          <div class="win-title" id="winTitle">🎉 You cracked it!</div>
+          <div class="win-sub" id="winSub"></div>
+          <div class="win-daily-badge" id="winDailyBadge" style="display:none"><span class="icon-calendar"></span> Daily Challenge</div>
+
+          <!-- Beat-your-best nudge -->
+          <div class="win-personal-best" id="winPB">
+            <div class="win-pb-row">
+              <span class="win-pb-label">Your best</span>
+              <span class="win-pb-val" id="pbBest">—</span>
+            </div>
+            <div class="win-pb-row">
+              <span class="win-pb-label">This game</span>
+              <span class="win-pb-val" id="pbThis"></span>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="win-actions">
+            <button class="btn-share" id="shareBtn" onclick="shareResult()">
+              ↗ Share result
+            </button>
+            <button class="btn-try-again" onclick="newGame()">
+              ↺ Try again
+            </button>
+          </div>
+        </div>
+
+        <!-- Meta row -->
+        <div class="meta-row">
+          <div class="meta-badges">
+            <div class="guess-badge">Guesses <span class="count" id="guessCounter">0</span></div>
+            <div class="guess-badge">Time <span class="count" id="timer">0:00</span></div>
+            <span class="daily-badge" id="dailyBadge" style="display:none"><span class="icon-calendar"></span> Daily</span>
+          </div>
+          <div style="display:flex;gap:var(--s2);align-items:center;">
+            <button class="btn btn-secondary" id="dailyBtn" onclick="toggleDailyMode()" title="Daily Challenge" aria-label="Toggle Daily Challenge">
+              <span class="icon-calendar"></span><span style="margin-left:4px">Daily</span>
+            </button>
+            <button class="btn btn-secondary" onclick="newGame()">↺ New Game</button>
+          </div>
+        </div>
+
+        <!-- Input -->
+        <div class="input-row">
+          <input
+            type="text"
+            class="guess-input"
+            id="guessInput"
+            maxlength="4"
+            placeholder="· · · ·"
+            inputmode="numeric"
+            autocomplete="off"
+            spellcheck="false"
+          />
+          <button class="btn btn-primary" id="submitBtn" onclick="submitGuess()">Guess</button>
+        </div>
+
+        <!-- Error -->
+        <div class="error-box" id="errorBox" role="alert" aria-live="polite"></div>
+
+        <hr class="divider" />
+
+        <!-- History -->
+        <div class="history-label">Previous Guesses</div>
+        <ul class="history-list" id="historyList" aria-live="polite">
+          <li class="empty-history">No guesses yet — take your shot!</li>
+        </ul>
+
+      </div><!-- /game-body -->
+    </div><!-- /game card -->
+
+    <!-- Leaderboard card -->
+    <div class="lb-card">
+      <div class="lb-header">
+        <div class="lb-title">🏆 Best Scores</div>
+        <button class="lb-clear-btn" onclick="clearScores()">Clear</button>
+      </div>
+      <hr class="lb-divider" />
+      <div class="lb-list" id="leaderboard"></div>
+    </div>
+
+  </div><!-- /layout -->
+
+  <script>
+    let secret   = '';
+    let guesses  = [];
+    let gameOver = false;
+    let startTime = Date.now();
+    let timerInterval;
+
+    // ══════════════════════════════════════════════════════
+    // SOUND & HAPTIC ENGINE
+    // ══════════════════════════════════════════════════════
+    let audioCtx  = null;   // lazy — created on first user gesture
+    let isMuted   = localStorage.getItem('muted') === '1';
+
+    // Apply persisted mute state to button on load
+    function syncMuteUI() {
+      const btn   = document.getElementById('muteToggle');
+      const icon  = document.getElementById('muteIcon');
+      const label = document.getElementById('muteLabel');
+      icon.textContent  = isMuted ? '🔇' : '🔊';
+      label.textContent = isMuted ? 'Sound off' : 'Sound on';
+      btn.classList.toggle('muted', isMuted);
+      btn.setAttribute('aria-label', isMuted ? 'Unmute sounds' : 'Mute sounds');
+    }
+
+    function toggleMute() {
+      isMuted = !isMuted;
+      localStorage.setItem('muted', isMuted ? '1' : '0');
+      syncMuteUI();
+      // Play a tiny confirmation tick so user hears it unmuted
+      if (!isMuted) playTick();
+    }
+
+    // Lazily create AudioContext on first call (browser autoplay policy)
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      // Resume if suspended (mobile browsers suspend until gesture)
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    /*
+     * Core primitive: schedule one oscillator note.
+     *   freq      — Hz
+     *   type      — 'sine' | 'square' | 'sawtooth' | 'triangle'
+     *   startAt   — AudioContext time to start
+     *   duration  — seconds the note plays
+     *   gainPeak  — peak volume 0–1
+     *   fadeIn    — attack time (seconds)
+     *   fadeOut   — release time (seconds)
+     */
+    function scheduleNote(freq, type, startAt, duration, gainPeak = 0.35, fadeIn = 0.005, fadeOut = 0.08) {
+      const ctx  = getAudioCtx();
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+
+      osc.type = type;
+      osc.frequency.setValueAtTime(freq, startAt);
+
+      gain.gain.setValueAtTime(0, startAt);
+      gain.gain.linearRampToValueAtTime(gainPeak, startAt + fadeIn);
+      gain.gain.setValueAtTime(gainPeak, startAt + duration - fadeOut);
+      gain.gain.linearRampToValueAtTime(0, startAt + duration);
+
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(startAt);
+      osc.stop(startAt + duration + 0.01);
+    }
+
+    // ── Individual sounds ────────────────────────────────
+
+    // Short soft click — unmute confirmation
+    function playTick() {
+      if (isMuted) return;
+      const ctx = getAudioCtx();
+      const t   = ctx.currentTime;
+      scheduleNote(600, 'sine', t, 0.07, 0.2, 0.003, 0.06);
+    }
+
+    // Low dull thud — 0 bulls, 0 cows (cold)
+    function playCold() {
+      if (isMuted) return;
+      const ctx = getAudioCtx();
+      const t   = ctx.currentTime;
+      scheduleNote(130, 'sawtooth', t, 0.18, 0.3, 0.005, 0.15);
+    }
+
+    // Warm mid tone — cows only
+    function playCow() {
+      if (isMuted) return;
+      const ctx = getAudioCtx();
+      const t   = ctx.currentTime;
+      scheduleNote(440, 'sine', t,       0.12, 0.28);
+      scheduleNote(520, 'sine', t + 0.1, 0.12, 0.22);
+    }
+
+    // Ascending arpeggio — bulls found (n = 1..3)
+    function playBulls(n) {
+      if (isMuted) return;
+      const ctx = getAudioCtx();
+      const t   = ctx.currentTime;
+      const scales = [
+        [440, 554],
+        [440, 554, 659],
+        [440, 554, 659, 784],
+      ];
+      const notes = scales[Math.min(n, 3) - 1];
+      notes.forEach((freq, i) => {
+        scheduleNote(freq, 'sine', t + i * 0.1, 0.14, 0.3, 0.005, 0.1);
+      });
+    }
+
+    // Full win fanfare — 4 bulls
+    function playWin() {
+      if (isMuted) return;
+      const ctx = getAudioCtx();
+      const t   = ctx.currentTime;
+      [523, 659, 784, 1047].forEach((freq, i) => {
+        scheduleNote(freq, 'sine', t + i * 0.1, 0.35, 0.35, 0.005, 0.25);
+      });
+      // Shimmer sweep on top
+      const shimmer = ctx.createOscillator();
+      const sGain   = ctx.createGain();
+      shimmer.type  = 'sine';
+      shimmer.frequency.setValueAtTime(1600, t + 0.4);
+      shimmer.frequency.linearRampToValueAtTime(2000, t + 0.8);
+      sGain.gain.setValueAtTime(0, t + 0.4);
+      sGain.gain.linearRampToValueAtTime(0.15, t + 0.45);
+      sGain.gain.linearRampToValueAtTime(0, t + 0.85);
+      shimmer.connect(sGain);
+      sGain.connect(ctx.destination);
+      shimmer.start(t + 0.4);
+      shimmer.stop(t + 0.9);
+    }
+
+    // Short low buzz — invalid input
+    function playError() {
+      if (isMuted) return;
+      const ctx = getAudioCtx();
+      const t   = ctx.currentTime;
+      scheduleNote(120, 'square', t,       0.08, 0.25, 0.003, 0.06);
+      scheduleNote(100, 'square', t + 0.1, 0.08, 0.2,  0.003, 0.06);
+    }
+
+    // Soft descending whoosh — new game
+    function playReset() {
+      if (isMuted) return;
+      const ctx  = getAudioCtx();
+      const t    = ctx.currentTime;
+      const osc  = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(800, t);
+      osc.frequency.linearRampToValueAtTime(400, t + 0.22);
+      gain.gain.setValueAtTime(0.25, t);
+      gain.gain.linearRampToValueAtTime(0, t + 0.22);
+      osc.connect(gain);
+      gain.connect(ctx.destination);
+      osc.start(t);
+      osc.stop(t + 0.25);
+    }
+
+    // Mute-check helper used by getCtxIfUnmuted (kept for compatibility)
+    function getCtxIfUnmuted() {
+      if (isMuted) return null;
+      return getAudioCtx();
+    }
+
+    // ── Haptics (Android; silently ignored on iOS) ────────
+    function vibrate(pattern) {
+      if (isMuted) return;               // mute suppresses haptics too
+      if ('vibrate' in navigator) {
+        navigator.vibrate(pattern);
+      }
+    }
+
+    // Convenience haptic presets
+    const haptic = {
+      tick:     () => vibrate([30]),
+      cold:     () => vibrate([80]),
+      cow:      () => vibrate([30, 40, 30]),
+      bull:     () => vibrate([30, 30, 50]),
+      win:      () => vibrate([50, 30, 50, 30, 100]),
+      error:    () => vibrate([100, 50, 100]),
+      reset:    () => vibrate([40]),
+    };
+
+    /*
+     * Master feedback dispatcher.
+     * Called after each guess with { bulls, cows }.
+     * Picks the right sound + haptic for the result.
+     */
+    function playFeedback(bulls, cows) {
+      if (bulls === 4) {
+        playWin();
+        haptic.win();
+      } else if (bulls > 0) {
+        playBulls(bulls);
+        haptic.bull();
+      } else if (cows > 0) {
+        playCow();
+        haptic.cow();
+      } else {
+        playCold();
+        haptic.cold();
+      }
+    }
+
+    // ── Score & timer ─────────────────────────────────────────────────────────
+    function saveScore(guessesCount, timeTaken) {
+      const score = Math.round((1000 / (guessesCount * Math.max(timeTaken, 1))) * 100) / 100;
+      let scores = JSON.parse(localStorage.getItem('scores') || '[]');
+      scores.push({ guesses: guessesCount, time: timeTaken, score, playedAt: startTime });
+      scores.sort((a, b) => b.score - a.score);
+      scores = scores.slice(0, 5);
+      localStorage.setItem('scores', JSON.stringify(scores));
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      startTime = Date.now();
+      timerInterval = setInterval(() => {
+        const s = Math.floor((Date.now() - startTime) / 1000);
+        document.getElementById('timer').textContent = formatTime(s);
+      }, 1000);
+    }
+
+    function stopTimer() { clearInterval(timerInterval); }
+
+    function formatTime(s) {
+      return `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
+    }
+
+    // ── Dark mode ─────────────────────────────────────────────────────────────
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+      const isDark = theme === 'dark';
+      document.getElementById('themeIcon').textContent  = isDark ? '☀️' : '🌙';
+      document.getElementById('themeLabel').textContent = isDark ? 'Light mode' : 'Dark mode';
+      document.getElementById('themeToggle').setAttribute('aria-label', isDark ? 'Switch to light mode' : 'Switch to dark mode');
+      localStorage.setItem('theme', theme);
+    }
+
+    function toggleTheme() {
+      applyTheme(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+    }
+
+    // ── Privacy modal ─────────────────────────────────────────────────────────
+    function dismissPrivacy() {
+      document.getElementById('privacyModal').classList.add('hidden');
+      document.body.classList.remove('modal-open');
+      localStorage.setItem('privacy_acknowledged', '1');
+      document.getElementById('guessInput').focus();
+    }
+
+    function maybeShowPrivacy() {
+      if (!localStorage.getItem('privacy_acknowledged')) {
+        document.getElementById('privacyModal').classList.remove('hidden');
+        document.body.classList.add('modal-open');
+      }
+    }
+
+    // ── How to Play ───────────────────────────────────────────────────────────
+    function toggleHow() {
+      const btn  = document.getElementById('howToggle');
+      const body = document.getElementById('howBody');
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      btn.setAttribute('aria-expanded', String(!open));
+      body.classList.toggle('open', !open);
+    }
+
+    // ── Generate secret ───────────────────────────────────────────────────────
+    function generateSecret() {
+      const digits = [...'0123456789'];
+      const first  = digits.splice(Math.floor(Math.random() * 9) + 1, 1)[0];
+      let pool = digits.slice(), rest = [];
+      for (let i = 0; i < 3; i++) {
+        const idx = Math.floor(Math.random() * pool.length);
+        rest.push(pool.splice(idx, 1)[0]);
+      }
+      return first + rest.join('');
+    }
+
+    // ── Evaluate ──────────────────────────────────────────────────────────────
+    function evaluate(guess, sec) {
+      let bulls = 0, cows = 0;
+      for (let i = 0; i < 4; i++) {
+        if (guess[i] === sec[i]) bulls++;
+        else if (sec.includes(guess[i])) cows++;
+      }
+      return { bulls, cows };
+    }
+
+    // ── Validate ──────────────────────────────────────────────────────────────
+    function validate(val) {
+      if (!/^\d{4}$/.test(val))  return 'Please enter exactly 4 digits.';
+      if (new Set(val).size < 4) return 'No repeating digits allowed.';
+      return null;
+    }
+
+    // ── Submit ────────────────────────────────────────────────────────────────
+    function submitGuess() {
+      if (gameOver) return;
+      const input = document.getElementById('guessInput');
+      const val   = input.value.trim();
+      const err   = validate(val);
+      if (err) {
+        showError(err);
+        playError();
+        haptic.error();
+        input.classList.add('shake');
+        setTimeout(() => input.classList.remove('shake'), 340);
+        return;
+      }
+      clearError();
+      const { bulls, cows } = evaluate(val, secret);
+      guesses.unshift({ guess: val, bulls, cows });
+      updateCounter();
+      renderHistory();
+      playFeedback(bulls, cows);   // sound + haptic for this result
+      input.value = '';
+      input.focus();
+      if (bulls === 4) endGame();
+    }
+
+    // ── Daily challenge ───────────────────────────────────────────────────────
+    /*
+     * Deterministic secret from the date. Same number for everyone on the same
+     * calendar day. Derived by seeding a simple LCG with today's YYYYMMDD int.
+     * No server needed — pure math, same result on every device.
+     */
+    let isDailyMode = false;
+
+    function getDailySecret() {
+      const d   = new Date();
+      const key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+      // LCG: produces a stable pseudo-random sequence from the date seed
+      let seed = key;
+      const lcg = () => { seed = (seed * 1664525 + 1013904223) & 0xffffffff; return Math.abs(seed); };
+
+      const digits = [...'0123456789'];
+      // Pick first digit (non-zero)
+      const firstIdx = (lcg() % 9) + 1;          // 1..9
+      const first    = digits.splice(firstIdx, 1)[0];
+      const rest     = [];
+      for (let i = 0; i < 3; i++) {
+        const idx = lcg() % digits.length;
+        rest.push(digits.splice(idx, 1)[0]);
+      }
+      return first + rest.join('');
+    }
+
+    function getDailyKey() {
+      const d = new Date();
+      return `daily_${d.getFullYear()}_${d.getMonth() + 1}_${d.getDate()}`;
+    }
+
+    function hasDailyBeenPlayed() {
+      return !!localStorage.getItem(getDailyKey());
+    }
+
+    function markDailyPlayed(guessCount, timeTaken) {
+      localStorage.setItem(getDailyKey(), JSON.stringify({ guesses: guessCount, time: timeTaken }));
+    }
+
+    function toggleDailyMode() {
+      isDailyMode = !isDailyMode;
+      const btn = document.getElementById('dailyBtn');
+      btn.style.background    = isDailyMode ? 'var(--primary-faint)' : '';
+      btn.style.borderColor   = isDailyMode ? 'var(--primary)' : '';
+      btn.style.color         = isDailyMode ? 'var(--primary-text)' : '';
+      document.getElementById('dailyBadge').style.display = isDailyMode ? '' : 'none';
+
+      if (isDailyMode && hasDailyBeenPlayed()) {
+        // Already played today — show their result
+        const saved = JSON.parse(localStorage.getItem(getDailyKey()));
+        showError(`Already played today's daily! (${saved.guesses} guesses · ${formatTime(saved.time)})`);
+        isDailyMode = false;
+        btn.style.background  = '';
+        btn.style.borderColor = '';
+        btn.style.color       = '';
+        document.getElementById('dailyBadge').style.display = 'none';
+        return;
+      }
+      newGame();
+    }
+
+    // ── Beat-your-best ────────────────────────────────────────────────────────
+    /*
+     * Reads the top score from the leaderboard and compares it to the
+     * current game. Shows the nudge only when at least one prior game exists.
+     */
+    function renderBeatYourBest(currentGuesses, currentTime) {
+      const scores = JSON.parse(localStorage.getItem('scores') || '[]');
+      // Exclude the score we just saved (it's already in scores[0] after sort)
+      // Best prior = the best score before this game — find first entry that
+      // isn't exactly this game's stats (use playedAt as discriminator)
+      const prior = scores.find(s => s.playedAt !== startTime);
+
+      const pbEl   = document.getElementById('winPB');
+      const pbBest = document.getElementById('pbBest');
+      const pbThis = document.getElementById('pbThis');
+
+      if (!prior) {
+        // First game ever — no comparison to show
+        pbEl.classList.remove('visible');
+        return;
+      }
+
+      pbEl.classList.add('visible');
+
+      const isNewRecord = currentGuesses < prior.guesses ||
+        (currentGuesses === prior.guesses && currentTime < prior.time);
+
+      pbBest.innerHTML = `${prior.guesses} guess${prior.guesses !== 1 ? 'es' : ''} · ${formatTime(prior.time)}`;
+      pbThis.innerHTML = `${currentGuesses} guess${currentGuesses !== 1 ? 'es' : ''} · ${formatTime(currentTime)}`
+        + (isNewRecord ? ' <span class="win-pb-new">🏆 New record!</span>' : '');
+    }
+
+    // ── Share result ──────────────────────────────────────────────────────────
+    let shareText = '';   // built in endGame, used in shareResult()
+
+    function shareResult() {
+      const btn = document.getElementById('shareBtn');
+
+      // Mobile: use native share sheet (Android, iOS)
+      if (navigator.share) {
+        navigator.share({
+          title: 'Cows & Bulls',
+          text: shareText
+        }).catch(() => {
+          // User cancelled or share failed — do nothing
+        });
+        return;
+      }
+
+      // Desktop fallback: copy to clipboard
+      navigator.clipboard.writeText(shareText).then(() => {
+        const original = btn.innerHTML;
+        btn.textContent = '✅ Copied!';
+        btn.classList.add('copied');
+        setTimeout(() => {
+          btn.innerHTML = original;
+          btn.classList.remove('copied');
+        }, 2000);
+      }).catch(() => {
+        // Clipboard API unavailable (e.g. file:// protocol) — manual fallback
+        prompt('Copy your result:', shareText);
+      });
+    }
+
+    // ── End game ──────────────────────────────────────────────────────────────
+    function endGame() {
+      gameOver = true;
+      document.getElementById('guessInput').disabled = true;
+      document.getElementById('submitBtn').disabled  = true;
+      stopTimer();
+
+      const timeTaken = Math.floor((Date.now() - startTime) / 1000);
+      const n         = guesses.length;
+
+      // Save score (leaderboard)
+      saveScore(n, timeTaken);
+
+      // Mark daily as played if in daily mode
+      if (isDailyMode) {
+        markDailyPlayed(n, timeTaken);
+        document.getElementById('winDailyBadge').style.display = '';
+        document.getElementById('winTitle').textContent = '📅 Daily solved!';
+      } else {
+        document.getElementById('winDailyBadge').style.display = 'none';
+        document.getElementById('winTitle').textContent = '🎉 You cracked it!';
+      }
+
+      // Win subtitle
+      document.getElementById('winSub').textContent =
+        `Solved in ${n} guess${n === 1 ? '' : 'es'} · ${formatTime(timeTaken)}`;
+
+      // Beat-your-best nudge
+      renderBeatYourBest(n, timeTaken);
+
+      // Build share text
+      const modeTag = isDailyMode
+        ? `📅 Daily Challenge (${new Date().toLocaleDateString(undefined, { month:'short', day:'numeric' })})`
+        : '🎯 Cows & Bulls';
+      shareText = `${modeTag}\nSolved in ${n} guess${n === 1 ? '' : 'es'} · ${formatTime(timeTaken)}\nCan you beat me? 👉 Play free at cowsandbulls.game`;
+
+      // Render everything
+      renderLeaderboard();
+      document.getElementById('winBanner').classList.add('visible');
+    }
+
+    // ── UI helpers ────────────────────────────────────────────────────────────
+    function showError(msg)  { document.getElementById('errorBox').textContent = '⚠ ' + msg; }
+    function clearError()    { document.getElementById('errorBox').textContent = ''; }
+    function updateCounter() { document.getElementById('guessCounter').textContent = guesses.length; }
+
+    function makeChip(n, type) {
+      const label = type === 'bull' ? `${n} Bull${n !== 1 ? 's' : ''}` : `${n} Cow${n !== 1 ? 's' : ''}`;
+      const cls   = n === 0 ? 'chip chip-zero' : (type === 'bull' ? 'chip chip-bull' : 'chip chip-cow');
+      return `<span class="${cls}">${label}</span>`;
+    }
+
+    function renderHistory() {
+      const list    = document.getElementById('historyList');
+      const isMobile = window.innerWidth <= 680;
+
+      if (guesses.length === 0) {
+        list.innerHTML = '<li class="empty-history">No guesses yet — take your shot!</li>';
+        return;
+      }
+
+      list.innerHTML = '';
+
+      // Desktop: newest first (guesses[0] at top, natural scroll up for older)
+      // Mobile:  oldest first + flex column-reverse → newest sits at bottom
+      //          nearest to the input, no scroll needed
+      const ordered = isMobile ? [...guesses].reverse() : guesses;
+
+      ordered.forEach(({ guess, bulls, cows }, i) => {
+        const li = document.createElement('li');
+        // Compute display index (1 = first guess ever, regardless of render order)
+        const displayIdx = isMobile ? (i + 1) : (guesses.length - i);
+        // Mark latest: last element in mobile (newest at bottom), first on desktop
+        const isLatest = isMobile
+          ? (i === ordered.length - 1 && !gameOver)
+          : (i === 0 && !gameOver);
+        li.className = 'history-item' +
+          (isLatest ? ' latest' : '') +
+          (bulls === 4 ? ' win-row' : '');
+        li.dataset.bulls = bulls;
+        li.innerHTML = `
+          <span class="h-idx">${displayIdx}.</span>
+          <span class="h-num">${guess}</span>
+          <span class="h-arrow">→</span>
+          <span class="h-result">${makeChip(bulls, 'bull')} ${makeChip(cows, 'cow')}</span>`;
+        list.appendChild(li);
+      });
+
+      // Scroll newest into view — on mobile this is the last child (bottom)
+      requestAnimationFrame(() => {
+        const target = isMobile ? list.lastElementChild : list.firstElementChild;
+        if (target) target.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      });
+    }
+
+    // ── New game ──────────────────────────────────────────────────────────────
+    function newGame() {
+      // In daily mode use deterministic secret, otherwise random
+      secret   = isDailyMode ? getDailySecret() : generateSecret();
+      guesses  = [];
+      gameOver = false;
+      document.getElementById('guessInput').disabled = false;
+      document.getElementById('submitBtn').disabled  = false;
+      document.getElementById('guessInput').value    = '';
+      document.getElementById('winBanner').classList.remove('visible');
+      document.getElementById('winPB').classList.remove('visible');
+      document.getElementById('winDailyBadge').style.display = 'none';
+      clearError();
+      updateCounter();
+      renderHistory();
+      document.getElementById('guessInput').focus();
+      startTimer();
+      playReset();
+      haptic.reset();
+    }
+
+    // ── Leaderboard ───────────────────────────────────────────────────────────
+    function renderLeaderboard() {
+      const container = document.getElementById('leaderboard');
+      const scores    = JSON.parse(localStorage.getItem('scores') || '[]');
+
+      if (scores.length === 0) {
+        container.innerHTML = `
+          <div class="lb-empty">
+            <div class="lb-empty-icon">🎯</div>
+            <div class="lb-empty-text">No scores yet</div>
+            <div class="lb-empty-sub">Win a game to appear here</div>
+          </div>`;
+        return;
+      }
+
+      const medals = ['🥇', '🥈', '🥉'];
+      container.innerHTML = '';
+      scores.forEach((s, i) => {
+        const div = document.createElement('div');
+        div.className = 'lb-row' + (i === 0 ? ' lb-top' : '');
+        div.style.animationDelay = `${i * 0.05}s`;
+
+        const medal = medals[i]
+          ? `<span class="lb-medal">${medals[i]}</span>`
+          : `<span class="lb-medal lb-num">${i + 1}</span>`;
+
+        const date = s.playedAt
+          ? new Date(s.playedAt).toLocaleString(undefined, {
+              month: 'short', day: 'numeric',
+              hour: '2-digit', minute: '2-digit'
+            })
+          : 'Unknown';
+
+        div.innerHTML = `
+          ${medal}
+          <div class="lb-info">
+            <div class="lb-stat-row">
+              <span class="lb-stat">
+                <span class="lb-stat-label">Guesses</span>
+                <span class="lb-stat-val">${s.guesses}</span>
+              </span>
+              <span class="lb-stat">
+                <span class="lb-stat-label">Duration</span>
+                <span class="lb-stat-val">${formatTime(s.time)}</span>
+              </span>
+            </div>
+            <div class="lb-played-at">Played ${date}</div>
+          </div>
+          <div class="lb-score-badge">
+            <span class="lb-score-val">${s.score}</span>
+            <span class="lb-score-label">score</span>
+          </div>`;
+        container.appendChild(div);
+      });
+    }
+
+    function clearScores() {
+      localStorage.removeItem('scores');
+      renderLeaderboard();
+    }
+
+    // ── Event listeners ───────────────────────────────────────────────────────
+    document.getElementById('guessInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') submitGuess();
+    });
+
+    document.getElementById('guessInput').addEventListener('input', function () {
+      this.value = this.value.replace(/\D/g, '').slice(0, 4);
+    });
+
+    // close modal on overlay click (not on modal itself)
+    document.getElementById('privacyModal').addEventListener('click', function(e) {
+      if (e.target === this) dismissPrivacy();
+    });
+
+    // Re-render history on resize so mobile/desktop order stays correct
+    let _lastMobile = window.innerWidth <= 680;
+    window.addEventListener('resize', () => {
+      const nowMobile = window.innerWidth <= 680;
+      if (nowMobile !== _lastMobile) {
+        _lastMobile = nowMobile;
+        if (guesses.length > 0) renderHistory();
+      }
+    });
+
+    // ── Stale score migration ─────────────────────────────────────────────────
+    (function migrateScores() {
+      const scores = JSON.parse(localStorage.getItem('scores') || '[]');
+      if (scores.some(s => !s.playedAt)) localStorage.removeItem('scores');
+    })();
+
+    // ── Init ──────────────────────────────────────────────────────────────────
+    applyTheme(localStorage.getItem('theme') || 'light');
+    syncMuteUI();
+    maybeShowPrivacy();
+    // suppress sound on initial page load — no user gesture yet
+    const _muted = isMuted;
+    isMuted = true;
+    newGame();
+    isMuted = _muted;
+    renderLeaderboard();
+  </script>
+</body>
+</html>
